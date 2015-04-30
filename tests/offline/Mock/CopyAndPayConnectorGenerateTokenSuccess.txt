@@ -1,0 +1,8 @@
+HTTP/1.1 200 OK
+Date: Tue, 28 Apr 2015 16:43:37 GMT
+Server: Apache-Coyote/1.1
+Content-Type: application/json
+Content-Length: 78
+Connection: close
+
+{ "transaction": { "token": "5BE620B0177829B5003728901F76AD84.sbg-vm-fe01"}  }

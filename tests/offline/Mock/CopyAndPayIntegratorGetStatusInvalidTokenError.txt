@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+Date: Tue, 28 Apr 2015 16:55:23 GMT
+Server: Apache-Coyote/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Language: en-US
+Content-Length: 91
+Connection: close
+
+{"errorMessage":"Invalid or expired token","processingTime":"Tue Apr 28 16:55:23 UTC 2015"}

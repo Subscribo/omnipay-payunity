@@ -1,0 +1,9 @@
+HTTP/1.1 200 OK
+Date: Tue, 28 Apr 2015 18:37:55 GMT
+Server: Apache-Coyote/1.1
+Content-Type: application/json;charset=UTF-8
+Content-Language: en-US
+Content-Length: 1135
+Connection: close
+
+{"token":"E60B057DF9CDADE6784DA3E5E285385D.sbg-vm-fe01","transaction":{"account":{"bin":"401288","brand":"VISA","expiry":{"month":"06","year":"2015"},"holder":"John Holder","last4Digits":"1881","registration":"8a82944a4cfff62d014d01522c541111"},"channel":"52275ebaf361f20a76b038ba4c806991","criterions":[{"name":"mode","value":"copyandpay"}],"customer":{"address":{"city":"Wien","country":"AT","state":"AT13","street":"Main street 1\/1\nCentral District"},"contact":{"email":"email@example.com","ip":"192.0.2.1","ipCountry":"at"}},"identification":{"shopperid":"Optional identification of customer","shortId":"5871.8096.6562","transactionid":"Optional identification of this transaction 123","uniqueId":"8a82944a4cfff62d014d01522e25136a"},"mode":"INTEGRATOR_TEST","payment":{"clearing":{"amount":"0.45","currency":"EUR"},"code":"CC.DB"},"processing":{"code":"CC.DB.90.00","connectorDetails":[],"reason":{"code":"00","message":"Successful Processing"},"result":"ACK","return":{"code":"000.100.110","message":"Request successfully processed in 'Merchant in Integrator Test Mode'"},"timestamp":"2015-04-28 18:37:52"},"response":"SYNC"}}
