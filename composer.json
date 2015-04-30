@@ -29,11 +29,16 @@
             "homepage": "http://kochabo.com"
         }
     ],
+    "support": {
+        "email": "packages@subscribo.io",
+        "issues": "https://github.com/Subscribo/omnipay-payunity/issues",
+        "source": "https://github.com/Subscribo/omnipay-payunity"
+    },
     "autoload": {
         "psr-4": {"Omnipay\\PayUnity\\": "src/"}
     },
     "require": {
-        "php": "^5.4",
+        "php": "^5.4 || 7.0",
         "omnipay/common": "^2.3.2",
         "psr/http-message": "^0.10.1",
         "egeloen/http-adapter": "^0.8@dev",
