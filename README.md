@@ -75,7 +75,7 @@ Method purchase() expects an array with this key as its argument:
 Additionally these keys could be specified:
 
 * currency (e.g. EUR)
-* card
+* card (using CreditCard object with extended list of attributes, including mobile, salutation, identificationDocumentNumber and identificationDocumentType)
 * cardReference
 * identificationReferenceId
 * brands
@@ -97,19 +97,44 @@ Method purchase() returns an instance of CopyAndPayPurchaseRequest having method
 * getTransactionToken()
 * haveWidget()
 * getWidget()
-* getWidgetJavascript()
-* getWidgetForm()
 
 Method isSuccessful() always returns false, as the COPYandPAY workflow is as follows:
 
   1. using purchase() method you acquire transactionToken,
-  2. then and you either manually, using static helpers
-     or using CopyAndPayPurchaseResponse methods: getWidget()
-     (or getWidgetJavascript() and getWidgetForm() if you want to have these parts separated)
-     create the frontend widget and display it to customer
-  3. and when customer fill and sends the widget,
+  2. then create or get (using CopyAndPayPurchaseResponse::getWidget())
+     frontend widget and display it to customer (you can echo it or render it by parts, see CopyAndPayWidget class for more details)
+  3. and when customer fills and sends the widget,
   4. he is redirected to returnUrl provided,
   5. where you can finish/check the transaction (see below)
+
+#### CopyAndPayWidget
+
+Class constructor, methods render(), isRenderable(), renderHtmlForm(), renderJavascript()
+and CopyAndPayPurchaseResponse::getWidget() accepts as first (optional) argument array with following keys:
+
+* transactionToken
+* testMode (optional; false or true)
+* returnUrl
+* brands
+* language (optional; 2 character lowercase string - language descriptor, e.g. 'en', 'de'...)
+* style (optional; 'card', 'plain' or 'none');
+* loadCompressedJavascript (optional; true or false)
+* loadJavascriptAsynchronously (optional; true or false)
+
+First two parameters are usually provided to the constructor via CopyAndPayPurchaseResponse::getWidget(),
+if returnUrl and/or brands had been set on purchase() method, these are provided as well,
+otherwise they should be provided manually either through setters of CopyAndPayWidget object or via $parameters argument on rendering.
+
+##### Methods:
+
+* render() - render complete widget
+* renderHtmlForm() - render html part - you can use it on place, where you want the form to be rendered
+* renderJavascript() - render javascript loading part, you can put in e.g. in html head
+* isRenderable() - returns true, if widget can be rendered with parameters provided (if any)
+* __toString() - is used, when echoing the widget, returns empty string for non-renderable widget
+* getParameters()
+* getDefaultParameters()
+* getters and setter for particular parameters
 
 #### completePurchase()
 

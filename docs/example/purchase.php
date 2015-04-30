@@ -52,7 +52,7 @@ $response = $gateway->purchase([
     'amount' => $amount,
     'currency' => 'EUR',
     'brands' => 'VISA MASTER MAESTRO SOFORTUEBERWEISUNG',
-    'returnUrl' => 'https://localhost/example/complete/purchase',
+    'returnUrl' => 'https://your.site.example/complete/purchase',
     'transactionId' => 'Optional identification of this transaction',
     'presentationUsage' => 'Optional: Just for testing',
     'paymentMemo' => 'Optional MEMO',
@@ -60,10 +60,10 @@ $response = $gateway->purchase([
 ])->send();
 
 if ( ! $response->haveWidget()) {
-    echo '<div>Some error have occurred.</div>';
+    echo '<div>Some error has occurred.</div>';
 } else {
     $widget = $response->getWidget();
-    echo '<div>You can try to pay us '.$amount.' Euro using the form bellow.</div>';
+    echo '<div>You can try to pay us '.$amount.' Euro using the form bellow.</div>'."\n";
     echo $widget;
 }
 ?>
