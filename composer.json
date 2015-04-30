@@ -38,7 +38,7 @@
         "psr-4": {"Omnipay\\PayUnity\\": "src/"}
     },
     "require": {
-        "php": "^5.4 || 7.0",
+        "php": "^5.4 || 7.0@dev",
         "omnipay/common": "^2.3.2",
         "psr/http-message": "^0.10.1",
         "egeloen/http-adapter": "^0.8@dev",
