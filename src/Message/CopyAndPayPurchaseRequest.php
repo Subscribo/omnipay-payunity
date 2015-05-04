@@ -244,5 +244,4 @@ class CopyAndPayPurchaseRequest extends AbstractRequest
         }
         return $data;
     }
-
 }
