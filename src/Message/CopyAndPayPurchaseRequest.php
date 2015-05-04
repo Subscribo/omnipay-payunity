@@ -199,6 +199,50 @@ class CopyAndPayPurchaseRequest extends AbstractRequest
             $data['CUSTOMER.IDENTIFICATION.PAPER'] = $card->getIdentificationDocumentType();
             $data['CUSTOMER.IDENTIFICATION.VALUE'] = $card->getIdentificationDocumentNumber();
         }
+        if ($card->getShippingContactDifferences()) {
+            $data = $this->addShippingDataFromCard($card, $data);
+        }
         return $data;
     }
+
+    protected function addShippingDataFromCard(CreditCard $card, array $data)
+    {
+        if ($card->getShippingFirstName()) {
+            $data['CUSTOMER.SHIPPING.NAME.GIVEN'] = $card->getShippingFirstName();
+        }
+        if ($card->getShippingLastName()) {
+            $data['CUSTOMER.SHIPPING.NAME.FAMILY'] = $card->getShippingLastName();
+        }
+        $street = '';
+        if ($card->getShippingAddress1()) {
+            $street = $card->getShippingAddress1();
+        }
+        if ($card->getShippingAddress2()) {
+            $street .= "\n".$card->getShippingAddress2();
+        }
+        $street = trim($street);
+        if ($street) {
+            $data['CUSTOMER.SHIPPING.ADDRESS.STREET'] = $street;
+        }
+        if ($card->getShippingCity()) {
+            $data['CUSTOMER.SHIPPING.ADDRESS.CITY'] = $card->getShippingCity();
+        }
+        if ($card->getShippingPostcode()) {
+            $data['CUSTOMER.SHIPPING.ADDRESS.ZIP'] = $card->getShippingPostcode();
+        }
+        if ($card->getShippingState()) {
+            $data['CUSTOMER.SHIPPING.ADDRESS.STATE'] = $card->getShippingState();
+        }
+        if ($card->getShippingCountry()) {
+            $data['CUSTOMER.SHIPPING.ADDRESS.COUNTRY'] = $card->getShippingCountry();
+        }
+        if ($card->getShippingPhone()) {
+            $data['CUSTOMER.SHIPPING.CONTACT.PHONE'] = $card->getShippingPhone();
+        }
+        if ($card->getShippingMobile()) {
+            $data['CUSTOMER.SHIPPING.CONTACT.MOBILE'] = $card->getShippingMobile();
+        }
+        return $data;
+    }
+
 }

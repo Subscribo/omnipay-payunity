@@ -45,6 +45,7 @@ $card = [
     'email' => 'email@example.com',
     'phone' => '+44 1632 960 111',
     'mobile' => '+44 7700 900 222',
+    'shippingAddress1' => 'Main Square 2', //Note: Other contact parameters are taken from generic fields (address2...)
 ];
 
 

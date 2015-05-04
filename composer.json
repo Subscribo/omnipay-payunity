@@ -42,7 +42,7 @@
         "omnipay/common": "^2.3.2",
         "psr/http-message": "^0.10.1",
         "egeloen/http-adapter": "^0.8@dev",
-        "subscribo/omnipay-subscribo-shared": "^0.2.0",
+        "subscribo/omnipay-subscribo-shared": "^0.2.1",
         "subscribo/psr-http-tools": "^0.2.0"
     },
     "require-dev": {

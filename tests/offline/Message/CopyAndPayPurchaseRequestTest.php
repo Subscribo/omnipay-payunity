@@ -51,6 +51,18 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->card['billingCountry'] = 'AT';
         $this->card['identificationDocumentType'] = 'PASSPORT';
         $this->card['identificationDocumentNumber'] = 'AB123 456 C7';
+        $this->card['shippingFirstName'] = 'Mary';
+        $this->card['shippingLastName'] = 'Shopper';
+        $this->card['shippingSalutation'] = 'MS';
+        $this->card['shippingTitle'] = null;
+        $this->card['shippingMobile'] = '+44-7700-900-220';
+        $this->card['shippingPhone'] = '(+44) 01632 960 110';
+        $this->card['shippingAddress1'] = 'Main Square 2';
+        $this->card['shippingAddress2'] = null;
+        $this->card['shippingPostcode'] = 'XY1 23Z';
+        $this->card['shippingCountry'] = 'DE';
+        $this->card['shippingState'] = 'DE1';
+        $this->card['shippingCity'] = 'Berlin';
     }
 
     public function testGetDataDefault()
@@ -94,6 +106,17 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertArrayNotHasKey('CONTACT.IP', $data);
         $this->assertArrayNotHasKey('CUSTOMER.IDENTIFICATION.PAPER', $data);
         $this->assertArrayNotHasKey('CUSTOMER.IDENTIFICATION.VALUE', $data);
+
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.NAME.GIVEN', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.NAME.FAMILY', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.COUNTRY', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.STATE', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.CITY', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.ZIP', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.STREET', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.PHONE', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.MOBILE', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.EMAIL', $data);
     }
 
     public function testRegistrationMode()
@@ -154,6 +177,17 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertSame('192.0.2.1', $data['CONTACT.IP']);
         $this->assertArrayNotHasKey('CUSTOMER.IDENTIFICATION.PAPER', $data);
         $this->assertArrayNotHasKey('CUSTOMER.IDENTIFICATION.VALUE', $data);
+
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.NAME.GIVEN', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.NAME.FAMILY', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.COUNTRY', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.STATE', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.CITY', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.ZIP', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.ADDRESS.STREET', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.PHONE', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.MOBILE', $data);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.EMAIL', $data);
     }
 
     public function testGetDataCard()
@@ -195,6 +229,17 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertArrayNotHasKey('CONTACT.IP', $data);
         $this->assertSame('PASSPORT', $data['CUSTOMER.IDENTIFICATION.PAPER']);
         $this->assertSame('AB123 456 C7', $data['CUSTOMER.IDENTIFICATION.VALUE']);
+
+        $this->assertSame('Mary', $data['CUSTOMER.SHIPPING.NAME.GIVEN']);
+        $this->assertSame('Shopper', $data['CUSTOMER.SHIPPING.NAME.FAMILY']);
+        $this->assertSame('DE', $data['CUSTOMER.SHIPPING.ADDRESS.COUNTRY']);
+        $this->assertSame('DE1', $data['CUSTOMER.SHIPPING.ADDRESS.STATE']);
+        $this->assertSame('Berlin', $data['CUSTOMER.SHIPPING.ADDRESS.CITY']);
+        $this->assertSame('XY1 23Z', $data['CUSTOMER.SHIPPING.ADDRESS.ZIP']);
+        $this->assertSame('Main Square 2', $data['CUSTOMER.SHIPPING.ADDRESS.STREET']);
+        $this->assertSame( '(+44) 01632 960 110', $data['CUSTOMER.SHIPPING.CONTACT.PHONE']);
+        $this->assertSame( '+44-7700-900-220', $data['CUSTOMER.SHIPPING.CONTACT.MOBILE']);
+        $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.EMAIL', $data);
     }
 
 
