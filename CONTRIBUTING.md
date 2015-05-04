@@ -1,5 +1,11 @@
 # Contributing Guidelines
 
+* Contributor may contribute code, tests, ideas and feedback via e-mail: packages@subscribo.io or via GitHub
+* Maintainers may, but not have to use the contribution
+* Maintainers may use the contribution in its entirety, or just part(s) of it, modified or unmodified
+* Contributor by contributing a contribution is giving consent for using and publishing the contribution under [MIT license](http://opensource.org/licenses/MIT) with current or future [license headers](LICENSE)
+* Please contribute only those contributions for which you have right to contribute and to give before mentioned consent
+
 * Fork the project.
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a future version unintentionally.
