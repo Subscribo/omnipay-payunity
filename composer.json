@@ -49,5 +49,10 @@
         "omnipay/tests": "^2.0",
         "monolog/monolog": "^1.13.1"
     },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.2.x-dev"
+        }
+    },
     "prefer-stable": true
 }
