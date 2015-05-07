@@ -12,19 +12,31 @@ processing library for PHP 5.3+. This package implements PayUnity support for Om
 Omnipay is installed via [Composer](http://getcomposer.org/). To install, add it
 to your `composer.json` file (you might need to add also development version of egeloen/http-adapter):
 
+for alpha version:
 ```json
 {
     "require": {
-        "subscribo/omnipay-payunity": "^0.2.0",
+        "subscribo/omnipay-payunity": "0.2.0",
         "egeloen/http-adapter": "^0.8@dev"
     }
 }
 ```
 
-And run composer to update your dependencies:
+for development (less stable) version:
+```json
+{
+    "require": {
+        "subscribo/omnipay-payunity": "^0.2.1@dev",
+        "egeloen/http-adapter": "^0.8@dev"
+    }
+}
+```
 
+and run composer to update your dependencies:
+```sh
     $ curl -s http://getcomposer.org/installer | php
     $ php composer.phar update
+```
 
 ## Basic Usage
 
@@ -189,6 +201,8 @@ If you want to run offline (not requiring internet connection) tests only, run:
 
 ## Support
 
+### General
+
 If you are having general issues with Omnipay, we suggest posting on
 [Stack Overflow](http://stackoverflow.com/). Be sure to add the
 [omnipay tag](http://stackoverflow.com/questions/tagged/omnipay) so it can be easily found.
@@ -197,5 +211,13 @@ If you want to keep up to date with release announcements, discuss ideas for the
 or ask more detailed questions, there is also a [mailing list](https://groups.google.com/forum/#!forum/omnipay) which
 you can subscribe to.
 
-If you believe you have found a bug, please report it using the [GitHub issue tracker](https://github.com/thephpleague/omnipay-dummy/issues),
+### Omnipay PayUnity driver specific
+
+If you believe you have found a bug, please send us an e-mail (packages@subscribo.io)
+or report it using the [GitHub issue tracker](https://github.com/Subscribo/omnipay-payunity/issues),
 or better yet, fork the library and submit a pull request.
+
+### Links
+
+* Omnipay Library web page: http://omnipay.thephpleague.com
+* Omnipay Library Github Project: https://github.com/thephpleague/omnipay

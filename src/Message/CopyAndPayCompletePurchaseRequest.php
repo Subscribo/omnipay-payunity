@@ -7,8 +7,8 @@ use Omnipay\Common\Exception\InvalidRequestException;
 use Omnipay\PayUnity\Message\AbstractRequest;
 use Omnipay\PayUnity\Message\CopyAndPayPurchaseResponse;
 use Omnipay\PayUnity\Message\CopyAndPayCompletePurchaseResponse;
-use Subscribo\PsrHttpTools\Factories\RequestFactory;
-use Subscribo\PsrHttpTools\Parsers\ResponseParser;
+use Subscribo\PsrHttpMessageTools\Factories\RequestFactory;
+use Subscribo\PsrHttpMessageTools\Parsers\ResponseParser;
 
 /**
  * Class CopyAndPayCompletePurchaseRequest

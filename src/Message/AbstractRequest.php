@@ -1,8 +1,8 @@
 <?php namespace Omnipay\PayUnity\Message;
 
 use Subscribo\Omnipay\Shared\Message\AbstractRequest as Base;
-use Subscribo\PsrHttpTools\Factories\RequestFactory;
-use Subscribo\PsrHttpTools\Parsers\ResponseParser;
+use Subscribo\PsrHttpMessageTools\Factories\RequestFactory;
+use Subscribo\PsrHttpMessageTools\Parsers\ResponseParser;
 use Omnipay\Common\Message\RequestInterface;
 use Omnipay\Common\Message\ResponseInterface;
 use Omnipay\PayUnity\Traits\DefaultGatewayParametersGettersAndSettersTrait;
