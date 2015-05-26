@@ -1,6 +1,7 @@
 <?php namespace Omnipay\PayUnity\Message;
 
 use Subscribo\Omnipay\Shared\Message\AbstractRequest as Base;
+use Subscribo\Omnipay\Shared\Traits\HttpMessageSendingTrait;
 use Subscribo\PsrHttpMessageTools\Factories\RequestFactory;
 use Subscribo\PsrHttpMessageTools\Parsers\ResponseParser;
 use Omnipay\Common\Message\RequestInterface;
@@ -15,6 +16,7 @@ use Omnipay\PayUnity\Traits\DefaultGatewayParametersGettersAndSettersTrait;
 abstract class AbstractRequest extends Base
 {
     use DefaultGatewayParametersGettersAndSettersTrait;
+    use HttpMessageSendingTrait;
 
     abstract protected function getEndpointUrl();
 

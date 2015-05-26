@@ -3,7 +3,7 @@
 namespace Omnipay\PayUnity\Widget;
 
 use Subscribo\Omnipay\Shared\Widget\AbstractWidget;
-use Subscribo\Omnipay\Shared\Exception\WidgetNotRenderableException;
+use Subscribo\Omnipay\Shared\Exception\WidgetInvalidRenderingParametersException;
 
 /**
  * Class CopyAndPayWidget
@@ -85,20 +85,10 @@ class CopyAndPayWidget extends AbstractWidget
         return $result;
     }
 
-
-
-    public function isRenderable($parameters = [])
-    {
-        if (is_array($parameters)) {
-            $parameters = array_replace($this->getParameters(), $parameters);
-        }
-        return ! $this->collectRenderingObstacles($parameters);
-    }
-
     /**
      * @param array $parameters
      * @return string
-     * @throws WidgetNotRenderableException
+     * @throws WidgetInvalidRenderingParametersException
      */
     public function render($parameters = [])
     {
@@ -129,6 +119,7 @@ class CopyAndPayWidget extends AbstractWidget
         return $result;
     }
 
+
     public function getDefaultParameters()
     {
         return [
@@ -141,6 +132,12 @@ class CopyAndPayWidget extends AbstractWidget
             'loadCompressedJavascript' => [true, false],
             'loadJavascriptAsynchronously' => [true, false],
         ];
+    }
+
+
+    public function getRequiredParameters()
+    {
+        return ['transactionToken', 'returnUrl', 'brands'];
     }
 
     /**
@@ -277,44 +274,5 @@ class CopyAndPayWidget extends AbstractWidget
     public function setLoadJavascriptAsynchronously($value)
     {
         return $this->setParameter('loadJavascriptAsynchronously', $value);
-    }
-
-    /**
-     * @param array $parameters
-     * @return array
-     * @throws \Subscribo\Omnipay\Shared\Exception\WidgetNotRenderableException
-     */
-    protected function checkParameters($parameters = [])
-    {
-        if (is_array($parameters)) {
-            $parameters = array_replace($this->getParameters(), $parameters);
-        }
-        $obstacles = $this->collectRenderingObstacles($parameters);
-        if ($obstacles) {
-            throw new WidgetNotRenderableException(reset($obstacles));
-        }
-        return $parameters;
-    }
-
-    /**
-     * @param array $parameters
-     * @return array
-     */
-    protected function collectRenderingObstacles($parameters = [])
-    {
-        if (( ! is_array($parameters))) {
-            return ['Parameters have to be an array'];
-        }
-        $obstacles = [];
-        if (empty($parameters['transactionToken'])) {
-            $obstacles[] = 'transactionToken is not set';
-        }
-        if (empty($parameters['returnUrl'])) {
-            $obstacles[] = 'returnUrl is not set';
-        }
-        if (is_null($parameters['brands'])) {
-            $obstacles[] = 'brands has not been set';
-        }
-        return $obstacles;
     }
 }

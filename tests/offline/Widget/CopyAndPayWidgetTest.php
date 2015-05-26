@@ -206,8 +206,8 @@ class CopyAndPayWidgetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetNotRenderableException
-     * @expectedExceptionMessage Parameters have to be an array
+     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetInvalidRenderingParametersException
+     * @expectedExceptionMessage Parameters should be an array
      */
     public function testRenderFailureNotArray()
     {
@@ -216,7 +216,7 @@ class CopyAndPayWidgetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetNotRenderableException
+     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetInvalidRenderingParametersException
      * @expectedExceptionMessage transactionToken
      */
     public function testRenderFailureNoTransactionToken()
@@ -227,7 +227,7 @@ class CopyAndPayWidgetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetNotRenderableException
+     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetInvalidRenderingParametersException
      * @expectedExceptionMessage returnUrl
      */
     public function testRenderFailureReturnUrl()
@@ -238,7 +238,7 @@ class CopyAndPayWidgetTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetNotRenderableException
+     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetInvalidRenderingParametersException
      * @expectedExceptionMessage brands
      */
     public function testRenderFailureBrands()

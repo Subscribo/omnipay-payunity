@@ -188,7 +188,7 @@ class CopyAndPayGatewayOnlineTest extends GatewayTestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetNotRenderableException
+     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetInvalidRenderingParametersException
      * @expectedExceptionMessage brands
      */
     public function testEmptyBrandsPurchase()
@@ -216,7 +216,7 @@ class CopyAndPayGatewayOnlineTest extends GatewayTestCase
 
     /**
      * @expectedException \InvalidArgumentException
-     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetNotRenderableException
+     * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetInvalidRenderingParametersException
      * @expectedExceptionMessage returnUrl
      */
     public function testEmptyReturnUrlPurchase()
