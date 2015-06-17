@@ -7,6 +7,12 @@
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment
 processing library for PHP 5.3+. This package implements PayUnity support for Omnipay.
 
+## Versions
+
+Omnipay PayUnity driver version | PayUnity COPYandPAY version
+------------------------------- | ---------------------------
+0.2.x                           | 4
+
 ## Installation
 
 Omnipay is installed via [Composer](http://getcomposer.org/). To install, add it
@@ -219,5 +225,7 @@ or better yet, fork the library and submit a pull request.
 
 ### Links
 
+* PayUnity web page: http://www.payunity.com
+* PayUnity COPYandPAY version 4 documentation: https://payunity.3cint.com/flex/
 * Omnipay Library web page: http://omnipay.thephpleague.com
 * Omnipay Library Github Project: https://github.com/thephpleague/omnipay
