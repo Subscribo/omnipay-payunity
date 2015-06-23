@@ -19,7 +19,8 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
                         'result' => 'WAITING FOR SHOPPER',
                     ],
                 ],
-            ]
+            ],
+            200
         );
         $this->assertTrue($response->isWaiting());
         $this->assertFalse($response->isSuccessful());
@@ -72,7 +73,8 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
                     ],
                     "response" => "SYNC"
                 ]
-            ]
+            ],
+            200
         );
         $this->assertFalse($response->isWaiting());
         $this->assertTrue($response->isSuccessful());
@@ -159,7 +161,8 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
                     ] ,
                     "response" => "SYNC"
                 ]
-            ]
+            ],
+            200
         );
         $this->assertFalse($response->isWaiting());
         $this->assertTrue($response->isSuccessful());
@@ -215,7 +218,8 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
                     ],
                     "response" => "SYNC"
                 ]
-            ]
+            ],
+            200
         );
         $this->assertFalse($response->isWaiting());
         $this->assertFalse($response->isSuccessful());
@@ -242,7 +246,8 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
     {
         $response = new CopyAndPayCompletePurchaseResponse(
             $this->getMockRequest(),
-            ["errorMessage" => "Invalid or expired token",]
+            ["errorMessage" => "Invalid or expired token"],
+            200
         );
         $this->assertFalse($response->isWaiting());
         $this->assertFalse($response->isSuccessful());

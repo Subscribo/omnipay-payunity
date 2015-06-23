@@ -22,11 +22,9 @@ class CopyAndPayPurchaseResponseTest extends TestCase
     {
         $response = new CopyAndPayPurchaseResponse(
             $this->request,
-            [
-                'transaction' => [
-                    'token' => 'A550D17DC663DFA8973CCAB8A117669A.sbg-vm-fe01',
-            ],
-        ]);
+            ['transaction' => ['token' => 'A550D17DC663DFA8973CCAB8A117669A.sbg-vm-fe01']],
+            200
+        );
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isWaiting());
         $this->assertFalse($response->isRedirect());
@@ -43,7 +41,7 @@ class CopyAndPayPurchaseResponseTest extends TestCase
 
     public function testEmptyTransactionToken()
     {
-        $response = new CopyAndPayPurchaseResponse($this->request, []);
+        $response = new CopyAndPayPurchaseResponse($this->request, [], 200);
         $this->assertFalse($response->isSuccessful());
         $this->assertFalse($response->isWaiting());
         $this->assertFalse($response->isRedirect());

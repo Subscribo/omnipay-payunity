@@ -29,6 +29,7 @@ class AbstractRequestTest extends TestCase
             [
                 $requestStub,
                 ['result' => 'test'],
+                200
             ]
         );
         $requestStub->expects($this->once())

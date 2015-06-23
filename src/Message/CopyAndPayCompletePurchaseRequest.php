@@ -4,7 +4,7 @@ namespace Omnipay\PayUnity\Message;
 
 use InvalidArgumentException;
 use Omnipay\Common\Exception\InvalidRequestException;
-use Omnipay\PayUnity\Message\AbstractRequest;
+use Omnipay\PayUnity\Message\CopyAndPayAbstractRequest;
 use Omnipay\PayUnity\Message\CopyAndPayPurchaseResponse;
 use Omnipay\PayUnity\Message\CopyAndPayCompletePurchaseResponse;
 use Subscribo\PsrHttpMessageTools\Factories\RequestFactory;
@@ -17,7 +17,7 @@ use Subscribo\PsrHttpMessageTools\Parsers\ResponseParser;
  *
  * @method \Omnipay\PayUnity\Message\CopyAndPayCompletePurchaseResponse send() send()
  */
-class CopyAndPayCompletePurchaseRequest extends AbstractRequest
+class CopyAndPayCompletePurchaseRequest extends CopyAndPayAbstractRequest
 {
     protected $liveEndpointUrl = 'https://ctpe.net/frontend/GetStatus';
 
@@ -51,20 +51,34 @@ class CopyAndPayCompletePurchaseRequest extends AbstractRequest
     }
 
     /**
+     * @param $data
      * @return string
      */
-    protected function getEndpointUrl()
+    protected function getEndpointUrl($data)
     {
-        return $this->getTestMode() ? $this->testEndpointUrl : $this->liveEndpointUrl;
+        $urlBase = $this->getTestMode() ? $this->testEndpointUrl : $this->liveEndpointUrl;
+        $uriSuffix = ';jsessionid='.urlencode($data['transactionToken']);
+
+        return $urlBase.$uriSuffix;
+    }
+
+    /**
+     * @param $data
+     * @return null
+     */
+    protected function getHttpRequestData($data)
+    {
+        return null;
     }
 
     /**
      * @param array $data
+     * @param int $httpResponseStatusCode
      * @return CopyAndPayCompletePurchaseResponse
      */
-    protected function createResponse($data)
+    protected function createResponse(array $data, $httpResponseStatusCode)
     {
-        return new CopyAndPayCompletePurchaseResponse($this, $data);
+        return new CopyAndPayCompletePurchaseResponse($this, $data, $httpResponseStatusCode);
     }
 
     /**
@@ -93,12 +107,7 @@ class CopyAndPayCompletePurchaseRequest extends AbstractRequest
         if (( ! is_array($data)) or empty($data['transactionToken'])) {
             throw new InvalidArgumentException('Provided data should be an array containing transactionToken key');
         }
-        $uriSuffix = ';jsessionid='.urlencode($data['transactionToken']);
-        $url = $this->getEndpointUrl().$uriSuffix;
-        $request = RequestFactory::make($url);
-        $response = $this->sendHttpMessage($request, true);
-        $responseData = ResponseParser::extractDataFromResponse($response);
-        $this->response = $this->createResponse($responseData);
-        return $this->response;
+
+        return parent::sendData($data);
     }
 }
