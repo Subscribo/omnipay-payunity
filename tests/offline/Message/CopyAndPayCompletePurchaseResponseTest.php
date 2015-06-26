@@ -183,7 +183,8 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertSame('6508.0016.9634', $response->getIdentificationShortId());
         $this->assertSame($response->getIdentificationUniqueId(), $response->getTransactionReference());
         $this->assertSame($response->getIdentificationTransactionId(), $response->getTransactionId());
-        $this->assertSame('8a82944a4cfff62d014d012551d30123', $response->getCardReference());
+        $expectedCardReference = 'eyJyZWdpc3RyYXRpb24iOiI4YTgyOTQ0YTRjZmZmNjJkMDE0ZDAxMjU1MWQzMDEyMyIsImNvZGUiOiJDQy5EQiJ9';
+        $this->assertSame($expectedCardReference, $response->getCardReference());
     }
 
     public function testRejected()

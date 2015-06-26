@@ -2,6 +2,7 @@
 
 use Subscribo\Omnipay\Shared\Message\AbstractRequest as Base;
 use Subscribo\Omnipay\Shared\Traits\SimpleRestfulRequestTrait;
+use Omnipay\PayUnity\Traits\DefaultGatewayParametersGettersAndSettersTrait;
 
 /**
  * Abstract Class AbstractRequest
@@ -11,4 +12,5 @@ use Subscribo\Omnipay\Shared\Traits\SimpleRestfulRequestTrait;
 abstract class AbstractRequest extends Base
 {
     use SimpleRestfulRequestTrait;
+    use DefaultGatewayParametersGettersAndSettersTrait;
 }

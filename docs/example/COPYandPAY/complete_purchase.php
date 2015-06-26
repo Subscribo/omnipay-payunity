@@ -29,7 +29,12 @@ if ($response->isSuccessful()) {
     echo '<div>Identification Short ID:'.$response->getIdentificationShortId().'</div>';
     echo '<div>Identification Shopper ID:'.$response->getIdentificationShopperId().'</div>';
     echo '<div>Identification Transaction ID:'.$response->getIdentificationTransactionId().'</div>';
-
+?>
+    <form action="https://your.site.example/example/Post/prepare" method="post">
+        <input type="hidden" name="reference" value="<?php echo $response->getCardReference(); ?>">
+        <button type="submit">Post operations</button>
+    </form>
+<?php
 } else {
     echo '<div>Something has happened.</div>';
     $message = $response->getMessage();

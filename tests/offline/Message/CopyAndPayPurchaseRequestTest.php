@@ -309,7 +309,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $value = uniqid();
         $this->assertSame($request, $request->setIdentificationReferenceId($value));
         $this->assertSame($value, $request->getIdentificationReferenceId());
-        $this->assertSame($value, $request->getCardReference());
+        $this->assertNull($request->getCardReference());
     }
 
     public function testSetCardReference()
@@ -319,7 +319,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $value = uniqid();
         $request->initialize(['cardReference' => $value]);
         $this->assertSame($value, $request->getCardReference());
-        $this->assertSame($value, $request->getIdentificationReferenceId());
+        $this->assertNull($request->getIdentificationReferenceId());
         $this->assertSame($request, $request->setCardReference(null));
         $this->assertNull($request->getCardReference());
         $this->assertNull($request->getIdentificationReferenceId());

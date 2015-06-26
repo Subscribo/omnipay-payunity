@@ -9,9 +9,10 @@ processing library for PHP 5.3+. This package implements PayUnity support for Om
 
 ## Versions
 
-Omnipay PayUnity driver version | PayUnity COPYandPAY version
-------------------------------- | ---------------------------
-0.2.x                           | 4
+Omnipay PayUnity driver version | PayUnity COPYandPAY version | Post Gateway
+------------------------------- | -------------------------------------------------
+0.2.x                           | 4                           | No
+0.3.x                           | 4                           | Basic functionality
 
 ## Installation
 
@@ -22,7 +23,7 @@ for alpha version:
 ```json
 {
     "require": {
-        "subscribo/omnipay-payunity": "0.2.0",
+        "subscribo/omnipay-payunity": "0.2.2",
         "egeloen/http-adapter": "^0.8@dev"
     }
 }
@@ -32,7 +33,7 @@ for development (less stable) version:
 ```json
 {
     "require": {
-        "subscribo/omnipay-payunity": "^0.2.1@dev",
+        "subscribo/omnipay-payunity": "0.3.*@dev",
         "egeloen/http-adapter": "^0.8@dev"
     }
 }
@@ -49,6 +50,7 @@ and run composer to update your dependencies:
 The following gateways are provided by this package:
 
 * PayUnity\COPYandPAY
+* PayUnity\Post (from version 0.3.x)
 
 Gateways in this package have following required options:
 
@@ -181,8 +183,9 @@ getCardReference returns tokens, which could be used for subsequent requests, vi
 
 For example code see:
 
-* [Purchase page](docs/example/purchase.php)
-* [Complete purchase page](docs/example/complete_purchase.php)
+* [COPYandPAY Purchase page](docs/example/COPYandPAY/purchase.php)
+* [COPYandPAY Complete purchase page](docs/example/COPYandPAY/complete_purchase.php)
+* [Post tokenized purchase page](docs/example/Post/purchase.php)
 
 ### General instructions
 

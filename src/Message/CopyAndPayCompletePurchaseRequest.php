@@ -4,7 +4,7 @@ namespace Omnipay\PayUnity\Message;
 
 use InvalidArgumentException;
 use Omnipay\Common\Exception\InvalidRequestException;
-use Omnipay\PayUnity\Message\CopyAndPayAbstractRequest;
+use Omnipay\PayUnity\Message\AbstractRequest;
 use Omnipay\PayUnity\Message\CopyAndPayPurchaseResponse;
 use Omnipay\PayUnity\Message\CopyAndPayCompletePurchaseResponse;
 use Subscribo\PsrHttpMessageTools\Factories\RequestFactory;
@@ -17,12 +17,13 @@ use Subscribo\PsrHttpMessageTools\Parsers\ResponseParser;
  *
  * @method \Omnipay\PayUnity\Message\CopyAndPayCompletePurchaseResponse send() send()
  */
-class CopyAndPayCompletePurchaseRequest extends CopyAndPayAbstractRequest
+class CopyAndPayCompletePurchaseRequest extends AbstractRequest
 {
-    protected $liveEndpointUrl = 'https://ctpe.net/frontend/GetStatus';
+    protected $endpointUrlBaseTest = 'https://test.ctpe.net';
 
-    protected $testEndpointUrl = 'https://test.ctpe.net/frontend/GetStatus';
+    protected $endpointUrlBaseLive = 'https://ctpe.net';
 
+    protected $endpointUrlPath = '/frontend/GetStatus';
 
     /**
      * @param string $value
@@ -56,10 +57,11 @@ class CopyAndPayCompletePurchaseRequest extends CopyAndPayAbstractRequest
      */
     protected function getEndpointUrl($data)
     {
-        $urlBase = $this->getTestMode() ? $this->testEndpointUrl : $this->liveEndpointUrl;
-        $uriSuffix = ';jsessionid='.urlencode($data['transactionToken']);
+        $urlBase = $this->getTestMode() ? $this->endpointUrlBaseTest : $this->endpointUrlBaseLive;
+        $urlPath = $this->endpointUrlPath;
+        $urlSuffix = ';jsessionid='.urlencode($data['transactionToken']);
 
-        return $urlBase.$uriSuffix;
+        return $urlBase.$urlPath.$urlSuffix;
     }
 
     /**

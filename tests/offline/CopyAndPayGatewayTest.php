@@ -271,6 +271,7 @@ class CopyAndPayGatewayTest extends GatewayTestCase
         $this->assertSame('5871.8096.6562', $response->getIdentificationShortId());
         $this->assertSame($response->getIdentificationUniqueId(), $response->getTransactionReference());
         $this->assertSame($response->getIdentificationTransactionId(), $response->getTransactionId());
-        $this->assertSame('8a82944a4cfff62d014d01522c541111', $response->getCardReference());
+        $expectedCardReference = 'eyJyZWdpc3RyYXRpb24iOiI4YTgyOTQ0YTRjZmZmNjJkMDE0ZDAxNTIyYzU0MTExMSIsImNvZGUiOiJDQy5EQiJ9';
+        $this->assertSame($expectedCardReference, $response->getCardReference());
     }
 }
