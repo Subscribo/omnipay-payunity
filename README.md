@@ -49,8 +49,8 @@ and run composer to update your dependencies:
 
 The following gateways are provided by this package:
 
-* [`PayUnity\COPYandPAY`](#payunitycopyandpay)
-* [`PayUnity\Post`](#payunitypost) (from version 0.3.x)
+* [`PayUnity\COPYandPAY`](#gateway-payunitycopyandpay)
+* [`PayUnity\Post`](#gateway-payunitypost) (from version 0.3.x)
 
 Gateways in this package have following required options:
 
@@ -79,12 +79,12 @@ For meaning of `testMode` see general [Omnipay documentation](https://thephpleag
 Setting `registrationMode` to `true` prepends `RG.` to default transaction mode, thus making the request also registration request.
 When `transactionMode` is specified, then registration mode is ignored (so you have to prepend 'RG.' manually, if you want to make the request registration)
 
-### Usage of gateway `PayUnity\COPYandPAY`
+### Gateway `PayUnity\COPYandPAY`
 
 Gateway `PayUnity\COPYandPAY` supports these request-sending methods:
 
-* `purchase()`
-* `completePurchase()`
+* [`purchase()`](#method-purchase)
+* [`completePurchase()`](#method-completepurchase)
 
 #### Method `purchase()`
 
@@ -96,7 +96,7 @@ Method `purchase()` expects an array with these keys as its argument:
 Additionally these keys could be specified:
 
 * `card` (using CreditCard object with extended list of attributes, including mobile, salutation, identificationDocumentNumber and identificationDocumentType)
-* `cardReference` (an encoded json string - result of getCardReference() from a previous call with registration
+* `cardReference` (result of [getCardReference()](#post-and-copyandpaycompletepurchase-responses) from a previous call with registration
 * `identificationReferenceId`
 * `brands`
 * `returnUrl`
@@ -178,9 +178,9 @@ For other methods see [Post and CopyAndPayCompletePurchase responses](#post-and-
 
 Gateway `PayUnity\Post` contains following methods:
 
-* `purchase()`
-* `void()`
-* `refund()`
+* [`purchase()`](#method-purchase-1)
+* [`void()`](#methods-void-and-refund)
+* [`refund()`](#methods-void-and-refund)
 
 #### Method `purchase()`
 
@@ -230,8 +230,8 @@ if both fails, then it tries to provide error code from 'POST.VALIDATION'.
 
 Method `getMessage()` tries to concatenate (with colon and spaces if both are provided) 'PROCESSING.REASON' and 'PROCESING.RESULT'.
 
-Method `getCardReference()` returns tokens, which could be used for subsequent requests, via specifying `cardReference` option on purchase request
-These tokens are a base64 encoded json, containing data from 'ACCOUNT.REGISTRATION' and 'PAYMENT.CODE'
+Method `getCardReference()` returns tokens, which could be used for subsequent requests, via specifying `cardReference` option on purchase request.
+These tokens are base64-encoded json, containing data from 'ACCOUNT.REGISTRATION' and 'PAYMENT.CODE'
 
 ### Example code
 
