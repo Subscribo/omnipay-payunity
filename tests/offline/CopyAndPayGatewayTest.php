@@ -116,6 +116,7 @@ class CopyAndPayGatewayTest extends GatewayTestCase
         $this->assertEmpty($response->getIdentificationShortId());
     }
 
+
     public function testConnectorModePurchase()
     {
         $this->setMockHttpResponse('CopyAndPayConnectorGenerateTokenSuccess.txt');
@@ -157,8 +158,6 @@ class CopyAndPayGatewayTest extends GatewayTestCase
 
         return $response;
     }
-
-
 
     /**
      * @expectedException \InvalidArgumentException
@@ -220,6 +219,7 @@ class CopyAndPayGatewayTest extends GatewayTestCase
         $widget->render(['brands' => ['VISA']]);
     }
 
+
     public function testInvalidTokenCompletePurchase()
     {
         $this->setMockHttpResponse('CopyAndPayIntegratorGetStatusInvalidTokenError.txt');
@@ -238,6 +238,7 @@ class CopyAndPayGatewayTest extends GatewayTestCase
         $this->assertEmpty($response->getCode());
         $this->assertEmpty($response->getTransactionReference());
     }
+
 
     public function testSuccessRegisteredCompletePurchase()
     {
@@ -260,9 +261,10 @@ class CopyAndPayGatewayTest extends GatewayTestCase
         $this->assertFalse($response->isTransparentRedirect());
         $this->assertFalse($response->haveWidget());
         $this->assertNotEmpty($response->getCode());
-        $this->assertSame('000.100.110', $response->getCode());
+        $this->assertSame('90', $response->getCode());
+        $this->assertSame('000.100.110', $response->getProcessingReturnCode());
         $this->assertNotEmpty($response->getMessage());
-        $this->assertSame("Request successfully processed in 'Merchant in Integrator Test Mode'", $response->getMessage());
+        $this->assertSame("Successful Processing : Request successfully processed in 'Merchant in Integrator Test Mode'", $response->getMessage());
         $this->assertNotEmpty($response->getTransactionReference());
         $this->assertSame('8a82944a4cfff62d014d01522e25136a', $response->getTransactionReference());
         $this->assertSame('Optional identification of this transaction 123', $response->getIdentificationTransactionId());
@@ -271,7 +273,7 @@ class CopyAndPayGatewayTest extends GatewayTestCase
         $this->assertSame('5871.8096.6562', $response->getIdentificationShortId());
         $this->assertSame($response->getIdentificationUniqueId(), $response->getTransactionReference());
         $this->assertSame($response->getIdentificationTransactionId(), $response->getTransactionId());
-        $expectedCardReference = 'eyJyZWdpc3RyYXRpb24iOiI4YTgyOTQ0YTRjZmZmNjJkMDE0ZDAxNTIyYzU0MTExMSIsImNvZGUiOiJDQy5EQiJ9';
+        $expectedCardReference = 'eyJhciI6IjhhODI5NDRhNGNmZmY2MmQwMTRkMDE1MjJjNTQxMTExIiwicGMiOiJDQy5EQiJ9';
         $this->assertSame($expectedCardReference, $response->getCardReference());
     }
 }

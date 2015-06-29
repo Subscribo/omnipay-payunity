@@ -7,7 +7,6 @@ use Omnipay\PayUnity\Message\CopyAndPayCompletePurchaseResponse;
 
 class CopyAndPayCompletePurchaseResponseTest extends TestCase
 {
-
     public function testWaiting()
     {
         $response = new CopyAndPayCompletePurchaseResponse(
@@ -40,6 +39,7 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertNull($response->getCardReference());
         $this->assertSame($response->getIdentificationTransactionId(), $response->getTransactionId());
     }
+
 
     public function testSuccess()
     {
@@ -84,9 +84,10 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertFalse($response->isTransparentRedirect());
         $this->assertFalse($response->haveWidget());
         $this->assertNotEmpty($response->getCode());
-        $this->assertSame('000.100.112', $response->getCode());
+        $this->assertSame('90', $response->getCode());
+        $this->assertSame('000.100.112', $response->getProcessingReturnCode());
         $this->assertNotEmpty($response->getMessage());
-        $this->assertSame('Request successfully processed in Merchant in Connector Test Mode', $response->getMessage());
+        $this->assertSame('Successful Processing : Request successfully processed in Merchant in Connector Test Mode', $response->getMessage());
         $this->assertNotEmpty($response->getTransactionReference());
         $this->assertSame('40288b163c865d30013c86600d6d0002', $response->getTransactionReference());
         $this->assertSame('20130129120736562fb049d9e1aee0686f9005f4515f2e', $response->getIdentificationTransactionId());
@@ -97,6 +98,7 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertSame($response->getIdentificationTransactionId(), $response->getTransactionId());
         $this->assertNull($response->getCardReference());
     }
+
 
     public function testRegistrationSuccess()
     {
@@ -172,9 +174,10 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertFalse($response->isTransparentRedirect());
         $this->assertFalse($response->haveWidget());
         $this->assertNotEmpty($response->getCode());
-        $this->assertSame('000.100.110', $response->getCode());
+        $this->assertSame('90', $response->getCode());
+        $this->assertSame('000.100.110', $response->getProcessingReturnCode());
         $this->assertNotEmpty($response->getMessage());
-        $this->assertSame("Request successfully processed in 'Merchant in Integrator Test Mode'", $response->getMessage());
+        $this->assertSame("Successful Processing : Request successfully processed in 'Merchant in Integrator Test Mode'", $response->getMessage());
         $this->assertNotEmpty($response->getTransactionReference());
         $this->assertSame('8a82944a4cfff62d014d0125541707c0', $response->getTransactionReference());
         $this->assertSame('Optional identification of this transaction 123', $response->getIdentificationTransactionId());
@@ -183,9 +186,10 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertSame('6508.0016.9634', $response->getIdentificationShortId());
         $this->assertSame($response->getIdentificationUniqueId(), $response->getTransactionReference());
         $this->assertSame($response->getIdentificationTransactionId(), $response->getTransactionId());
-        $expectedCardReference = 'eyJyZWdpc3RyYXRpb24iOiI4YTgyOTQ0YTRjZmZmNjJkMDE0ZDAxMjU1MWQzMDEyMyIsImNvZGUiOiJDQy5EQiJ9';
+        $expectedCardReference = 'eyJhciI6IjhhODI5NDRhNGNmZmY2MmQwMTRkMDEyNTUxZDMwMTIzIiwicGMiOiJDQy5EQiJ9';
         $this->assertSame($expectedCardReference, $response->getCardReference());
     }
+
 
     public function testRejected()
     {
@@ -230,9 +234,10 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertFalse($response->isTransparentRedirect());
         $this->assertFalse($response->haveWidget());
         $this->assertNotEmpty($response->getCode());
-        $this->assertSame('100.100.700', $response->getCode());
+        $this->assertSame('70', $response->getCode());
+        $this->assertSame('100.100.700', $response->getProcessingReturnCode());
         $this->assertNotEmpty($response->getMessage());
-        $this->assertSame('invalid cc number/brand combination', $response->getMessage());
+        $this->assertSame('Account Validation : invalid cc number/brand combination', $response->getMessage());
         $this->assertNotEmpty($response->getTransactionReference());
         $this->assertSame('40288b163c865d30013c866d69a2002a', $response->getTransactionReference());
         $this->assertSame('20130129120736562fb049d9e1aee0686f9005f4515f2e', $response->getIdentificationTransactionId());
@@ -242,6 +247,7 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertSame($response->getIdentificationUniqueId(), $response->getTransactionReference());
         $this->assertSame($response->getIdentificationTransactionId(), $response->getTransactionId());
     }
+
 
     public function testInvalidResponse()
     {
@@ -268,5 +274,4 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertEmpty($response->getIdentificationShortId());
         $this->assertSame($response->getIdentificationUniqueId(), $response->getTransactionReference());
     }
-
 }

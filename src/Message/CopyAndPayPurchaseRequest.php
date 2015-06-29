@@ -40,23 +40,6 @@ class CopyAndPayPurchaseRequest extends AbstractPostRequest
     }
 
     /**
-     * @return string
-     */
-    public function getPaymentType()
-    {
-        return $this->getParameter('paymentType');
-    }
-
-    /**
-     * @param string $value
-     * @return $this
-     */
-    public function setPaymentType($value)
-    {
-        return $this->setParameter('paymentType', $value);
-    }
-
-    /**
      * @param array $data
      * @param int $httpResponseStatusCode
      * @return CopyAndPayPurchaseResponse

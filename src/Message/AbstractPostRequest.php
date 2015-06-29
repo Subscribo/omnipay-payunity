@@ -20,7 +20,58 @@ abstract class AbstractPostRequest extends AbstractRequest
     protected $endpointUrlPath = '/frontend/payment.prc';
 
     /**
-     * @return string
+     * @return null|string
+     */
+    public function getTransactionId()
+    {
+        return $this->getIdentificationTransactionId();
+    }
+
+    /**
+     * @param string|null $value
+     * @return $this
+     */
+    public function setTransactionId($value)
+    {
+        return $this->setIdentificationTransactionId($value);
+    }
+
+    /**
+     * @return null|string
+     */
+    public function getTransactionReference()
+    {
+        return $this->getIdentificationReferenceId();
+    }
+
+    /**
+     * @param string|null $value
+     * @return $this
+     */
+    public function setTransactionReference($value)
+    {
+        return $this->setIdentificationReferenceId($value);
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getIdentificationTransactionId()
+    {
+        return $this->getParameter('identificationTransactionId');
+    }
+
+    /**
+     * @param string|null $value
+     * @return $this
+     */
+    public function setIdentificationTransactionId($value)
+    {
+        return $this->setParameter('identificationTransactionId', $value);
+    }
+
+    /**
+     * @return string|null
      */
     public function getIdentificationReferenceId()
     {
@@ -28,7 +79,7 @@ abstract class AbstractPostRequest extends AbstractRequest
     }
 
     /**
-     * @param string $value
+     * @param string|null $value
      * @return $this
      */
     public function setIdentificationReferenceId($value)
@@ -51,6 +102,23 @@ abstract class AbstractPostRequest extends AbstractRequest
     public function setPresentationUsage($value)
     {
         return $this->setParameter('presentationUsage', $value);
+    }
+
+    /**
+     * @return string
+     */
+    public function getPaymentType()
+    {
+        return $this->getParameter('paymentType');
+    }
+
+    /**
+     * @param string $value
+     * @return $this
+     */
+    public function setPaymentType($value)
+    {
+        return $this->setParameter('paymentType', $value);
     }
 
     /**
@@ -89,16 +157,6 @@ abstract class AbstractPostRequest extends AbstractRequest
     protected function getHttpRequestHeaders($data)
     {
         return ['Content-Type' => 'application/x-www-form-urlencoded; charset=UTF-8'];
-    }
-
-    /**
-     * @param array $data
-     * @param int $httpStatusCode
-     * @return \Omnipay\Common\Message\ResponseInterface|GenericPostResponse
-     */
-    protected function createResponse(array $data, $httpStatusCode)
-    {
-        return new GenericPostResponse($this, $data, $httpStatusCode);
     }
 
     /**
@@ -167,7 +225,7 @@ abstract class AbstractPostRequest extends AbstractRequest
      */
     protected function addIdentificationDetails(array $data)
     {
-        $transactionId = $this->getTransactionId();
+        $transactionId = $this->getIdentificationTransactionId();
         $shopperId = $this->getIdentificationShopperId();
         $invoiceId = $this->getIdentificationInvoiceId();
         $bulkId = $this->getIdentificationBulkId();

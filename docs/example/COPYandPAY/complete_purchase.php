@@ -32,6 +32,7 @@ if ($response->isSuccessful()) {
 ?>
     <form action="https://your.site.example/example/Post/prepare" method="post">
         <input type="hidden" name="reference" value="<?php echo $response->getCardReference(); ?>">
+        <input type="hidden" name="transaction" value="<?php echo $response->getTransactionReference(); ?>">
         <button type="submit">Post operations</button>
     </form>
 <?php
