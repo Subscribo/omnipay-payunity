@@ -12,7 +12,7 @@ processing library for PHP 5.3+. This package implements PayUnity support for Om
 Omnipay PayUnity driver version | PayUnity COPYandPAY version | Post Gateway
 ------------------------------- | --------------------------- | --------------------
 0.2.x                           | 4                           | No
-0.3.x                           | 4                           | Basic functionality
+0.3.x                           | 4                           | purchase() with token billing, refund(), void()
 
 ## Installation
 
@@ -49,15 +49,15 @@ and run composer to update your dependencies:
 
 The following gateways are provided by this package:
 
-* PayUnity\COPYandPAY
-* PayUnity\Post (from version 0.3.x)
+* [`PayUnity\COPYandPAY`](#payunitycopyandpay)
+* [`PayUnity\Post`](#payunitypost) (from version 0.3.x)
 
 Gateways in this package have following required options:
 
-* securitySender
-* transactionChannel
-* userLogin
-* userPwd
+* `securitySender`
+* `transactionChannel`
+* `userLogin`
+* `userPwd`
 
 To get those please contact your PayUnity representative.
 
@@ -65,119 +65,173 @@ To get those please contact your PayUnity representative.
 
 Additionally these options could be specified:
 
-* registrationMode
-* transactionMode
-* testMode
-* identificationShopperId
-* identificationInvoiceId
-* identificationBulkId (Note: not sure of having any effect at the moment)
+* `registrationMode`
+* `transactionMode`
+* `testMode`
+* `identificationShopperId`
+* `identificationInvoiceId`
+* `identificationBulkId` (Note: not sure of having any effect at the moment)
 
-For meaning and possible values of transactionMode ('TRANSACTION.MODE') see PayUnity documentation.
+For meaning and possible values of `transactionMode` ('TRANSACTION.MODE') see PayUnity documentation.
 
-For meaning of testMode see general [Omnipay documentation](https://thephpleague.com/omnipay)
+For meaning of `testMode` see general [Omnipay documentation](https://thephpleague.com/omnipay)
 
-Registration mode prepends 'RG.' to default transaction mode, thus making the request also registration request.
-When transaction mode is specified, then registration mode is ignored (so you have to prepend 'RG.' manually, if you want to make the request registration)
+Setting `registrationMode` to `true` prepends `RG.` to default transaction mode, thus making the request also registration request.
+When `transactionMode` is specified, then registration mode is ignored (so you have to prepend 'RG.' manually, if you want to make the request registration)
 
-### Usage of gateway PayUnity\COPYandPAY
+### Usage of gateway `PayUnity\COPYandPAY`
 
-Gateway PayUnity\COPYandPAY supports these request-sending methods:
+Gateway `PayUnity\COPYandPAY` supports these request-sending methods:
 
-* purchase()
-* completePurchase()
+* `purchase()`
+* `completePurchase()`
 
-#### purchase()
+#### Method `purchase()`
 
-Method purchase() expects an array with this key as its argument:
+Method `purchase()` expects an array with these keys as its argument:
 
-* amount
+* `amount`
+* `currency` (e.g. EUR)
 
 Additionally these keys could be specified:
 
-* currency (e.g. EUR)
-* card (using CreditCard object with extended list of attributes, including mobile, salutation, identificationDocumentNumber and identificationDocumentType)
-* cardReference
-* identificationReferenceId
-* brands
-* returnUrl
-* transactionId
-* presentationUsage
-* paymentMemo
+* `card` (using CreditCard object with extended list of attributes, including mobile, salutation, identificationDocumentNumber and identificationDocumentType)
+* `cardReference` (an encoded json string - result of getCardReference() from a previous call with registration
+* `identificationReferenceId`
+* `brands`
+* `returnUrl`
+* `transactionId`
+* `presentationUsage`
+* `paymentMemo`
 
-Option brands could be an array or string with space separated list of (uppercase) brand identifiers, supported by COPYandPAY widget.
+Option `brands` could be an array or string with space separated list of (uppercase) brand identifiers, supported by COPYandPAY widget.
 For supported brands see COPYandPAY documentation.
 
-Option returnUrl should be an absolute url in your site, where user should be redirected after payment.
+Option `returnUrl` should be an absolute url in your site, where user should be redirected after payment.
 
-You need to provide brands and returnUrl either as part of purchase() argument, or when creating a widget later.
+You need to provide `brands` and `returnUrl` either as part of `purchase()` argument, or when creating a widget later.
 
-Method purchase() returns an instance of CopyAndPayPurchaseRequest having method send(), which in turn is sending the request and returning an instance of CopyAndPayPurchaseResponse having the following methods (additional to standard Omnipay RequestInterface methods and besides other helper and static methods):
+Method `purchase()` returns an instance of `CopyAndPayPurchaseRequest` having method `send()`,
+which in turn is sending the request and returning an instance of `CopyAndPayPurchaseResponse` having the following methods
+(additional to standard Omnipay `RequestInterface` methods and besides other helper and static methods):
 
-* isTransactionToken()
-* getTransactionToken()
-* haveWidget()
-* getWidget()
+* `isTransactionToken()`
+* `getTransactionToken()`
+* `haveWidget()`
+* `getWidget()`
 
-Method isSuccessful() always returns false, as the COPYandPAY workflow is as follows:
+Method `isSuccessful()` always returns false, as the COPYandPAY workflow is as follows:
 
-  1. using purchase() method you acquire transactionToken,
-  2. then create or get (using CopyAndPayPurchaseResponse::getWidget())
+  1. using `purchase()` method you acquire `transactionToken`,
+  2. then create or get (using `CopyAndPayPurchaseResponse::getWidget()`)
      frontend widget and display it to customer (you can echo it or render it by parts, see CopyAndPayWidget class for more details)
   3. and when customer fills and sends the widget,
-  4. he is redirected to returnUrl provided,
+  4. he is redirected to `returnUrl` provided,
   5. where you can finish/check the transaction (see below)
 
-#### CopyAndPayWidget
+#### Class `CopyAndPayWidget`
 
-Class constructor, methods render(), isRenderable(), renderHtmlForm(), renderJavascript()
-and CopyAndPayPurchaseResponse::getWidget() accepts as first (optional) argument array with following keys:
+Class constructor, methods `render()`, `isRenderable()`, `renderHtmlForm()`, `renderJavascript()`
+and `CopyAndPayPurchaseResponse::getWidget()` accepts as first (optional) argument array with following keys:
 
-* transactionToken
-* testMode (optional; false or true)
-* returnUrl
-* brands
-* language (optional; 2 character lowercase string - language descriptor, e.g. 'en', 'de'...)
-* style (optional; 'card', 'plain' or 'none');
-* loadCompressedJavascript (optional; true or false)
-* loadJavascriptAsynchronously (optional; true or false)
+* `transactionToken`
+* `testMode` (optional; `false` or `true`)
+* `returnUrl`
+* `brands`
+* `language` (optional; 2 character lowercase string - language descriptor, e.g. 'en', 'de'...)
+* `style` (optional; 'card', 'plain' or 'none');
+* `loadCompressedJavascript` (optional; `true` or `false`)
+* `loadJavascriptAsynchronously` (optional; `true` or `false`)
 
-First two parameters are usually provided to the constructor via CopyAndPayPurchaseResponse::getWidget(),
-if returnUrl and/or brands had been set on purchase() method, these are provided as well,
-otherwise they should be provided manually either through setters of CopyAndPayWidget object or via $parameters argument on rendering.
+First two parameters are usually provided to the constructor via `CopyAndPayPurchaseResponse::getWidget()`,
+if `returnUrl` and/or `brands` had been set on `purchase()` method, these are provided as well,
+otherwise they should be provided manually either through setters of `CopyAndPayWidget` object or via `$parameters` argument on rendering.
 
 ##### Methods:
 
-* render() - render complete widget
-* renderHtmlForm() - render html part - you can use it on place, where you want the form to be rendered
-* renderJavascript() - render javascript loading part, you can put in e.g. in html head
-* isRenderable() - returns true, if widget can be rendered with parameters provided (if any)
-* __toString() - is used, when echoing the widget, returns empty string for non-renderable widget
-* getParameters()
-* getDefaultParameters()
+* `render()` - render complete widget
+* `renderHtmlForm()` - render html part - you can use it on place, where you want the form to be rendered
+* `renderJavascript()` - render javascript loading part, you can put in e.g. in html head
+* `isRenderable()` - returns true, if widget can be rendered with parameters provided (if any)
+* `__toString()` - is used, when echoing the widget, returns empty string for non-renderable widget
+* `getParameters()`
+* `getDefaultParameters()`
 * getters and setter for particular parameters
 
-#### completePurchase()
+#### Method `completePurchase()`
 
-Method completePurchase() could be called after customer had been redirected from widget (see above) back to your site.
+Method `completePurchase()` could be called after customer had been redirected from widget (see above) back to your site.
 It expects an array with key 'transactionToken' as a parameter,
 however it could be invoked also with an empty array
-and you can provide transaction token to returned instance of CopyAndPayCompletePurchaseRequest
-via setTransactionToken($token) or fill(CopyAndPayPurchaseResponse $response) methods.
-If transactionToken is not provided manually, an attempt will be made to retrieve it from httpRequest, provided to gateway constructor.
-(That usually means, that if you do not specify transactionToken, it will be taken from url query of current page automatically.)
+and you can provide transaction token to returned instance of `CopyAndPayCompletePurchaseRequest`
+via `setTransactionToken($token)` or `fill(CopyAndPayPurchaseResponse $response)` methods.
+If `transactionToken` is not provided manually, an attempt will be made to retrieve it from httpRequest, provided to gateway constructor.
+(That usually means, that if you do not specify `transactionToken`, it will be taken from url query of current page automatically.)
 
-After transactionToken is provided to CopyAndPayCompletePurchaseRequest, you can call its send() method and receive CopyAndPayCompletePurchaseResponse, with following methods (additional to standard Omnipay RequestInterface methods):
+After `transactionToken` is provided to `CopyAndPayCompletePurchaseRequest`, you can call its `send()` method
+and receive `CopyAndPayCompletePurchaseResponse`.
 
-* isWaiting() returns true when customer did not yet sent the widget form
-* getIdentificationShortId()
-* getIdentificationShopperId()
-* getCardReference()
+Method `CopyAndPayCompletePurchaseResponse::isWaiting()` returns true when customer did not yet sent the widget form.
+For other methods see [Post and CopyAndPayCompletePurchase responses](#post-and-copyandpaycompletepurchase-responses)
 
-* getTransactionId() is alias for getIdentificationTransactionId()
-* getTransactionReference() is alias for getIdentificationUniqueId()
+### Gateway `PayUnity\Post`
 
-getCardReference returns tokens, which could be used for subsequent requests, via specifying cardReference option on purchase request
-(setCardReference is actually an alias for setIdentificationReferenceId, and getCardReference is an alias for getIdentificationReferenceId)
+Gateway `PayUnity\Post` contains following methods:
+
+* `purchase()`
+* `void()`
+* `refund()`
+
+#### Method `purchase()`
+
+Following parameters are needed (either as argument of `purchase()` method or set via setters on `PostPurchaseRequest` returned:
+
+* `amount`
+* `currency` (e.g. 'EUR')
+
+In order to use tokens returned by getCardReference() from `CopyAndPayCompleteResponse`,
+you need to provide them to `PostPurchaseRequest` either via parameter during `purchase(['cardReference' => '...']);` call
+or using `setCardReference()` setter.
+
+#### Methods `void()` and `refund()`
+
+Methods `void()` and `refund()` need parameter `transactionReference` set either via parameter, i.e. `void(['transactionReference' => '...']);`
+or using `setTransactionReference()` method of `PostRefundRequest` or `PostVoidRequest`.
+Its value may be obtained from transaction-to-be-voided/refunded response object using `getTransactionReference()` method.
+(see [purchase.php](docs/example/Post/purchase.php) and [refund.php](docs/example/Post/refund.php) for code examples.)
+
+You may optionally specify transaction method ('CC', 'DD', ...), either directly via `setPaymentMethod()`
+or indirectly, using reference stored in registration token via `setCardReference()` method.
+
+Method `refund()` needs also `amount` and `currency` parameters.
+
+#### Post and CopyAndPayCompletePurchase responses
+
+Post gateway responses as well as `CopyAndPayCompletePurchase` response have also following methods:
+
+* `getTransactionReference()` alias for `getIdentificationUniqueId()`
+* `getTransactionId()` alias for `getIdentificationTransactionId()`
+* `getAccountRegistration()`
+* `getIdentificationShortId()`
+* `getIdentificationShopperId()`
+* `getProcessingReason()`
+* `getProcessingReturn()`
+* `getProcessingResult()`
+* `getProcessingCode()`
+* `getProcessingReasonCode()`
+* `getProcessingReturnCode()`
+* `getProcessingResultCode()`
+* `getProcessingStatusCode()`
+* `getProcessingPaymentCode()`
+* `getPostValidationErrorCode()`
+
+Method `getCode()` tries to get 'PROCESSING.STATUS.CODE', either directly or by parsing 'PROCESSING.CODE',
+if both fails, then it tries to provide error code from 'POST.VALIDATION'.
+
+Method `getMessage()` tries to concatenate (with colon and spaces if both are provided) 'PROCESSING.REASON' and 'PROCESING.RESULT'.
+
+Method `getCardReference()` returns tokens, which could be used for subsequent requests, via specifying `cardReference` option on purchase request
+These tokens are a base64 encoded json, containing data from 'ACCOUNT.REGISTRATION' and 'PAYMENT.CODE'
 
 ### Example code
 
@@ -186,6 +240,9 @@ For example code see:
 * [COPYandPAY Purchase page](docs/example/COPYandPAY/purchase.php)
 * [COPYandPAY Complete purchase page](docs/example/COPYandPAY/complete_purchase.php)
 * [Post tokenized purchase page](docs/example/Post/purchase.php)
+* [Post void page](docs/example/Post/void.php)
+* [Post refund page](docs/example/Post/refund.php)
+
 
 ### General instructions
 
