@@ -151,19 +151,6 @@ class GenericPostResponse extends AbstractResponse
         return $this->getTransactionData('processing.status.code');
     }
 
-    public function getExtractedProcessingStatusCode()
-    {
-        $processingCode = $this->getProcessingCode();
-
-        if (empty($processingCode)) {
-            return null;
-        }
-
-        $parts = explode('.', $processingCode);
-
-        return empty($parts[2]) ? null : $parts[2];
-    }
-
     /**
      * @return string|null
      */
@@ -186,6 +173,22 @@ class GenericPostResponse extends AbstractResponse
     public function getPostValidationErrorCode()
     {
         return $this->getTransactionData('post.validation');
+    }
+
+    /**
+     * @return string|null
+     */
+    protected function getExtractedProcessingStatusCode()
+    {
+        $processingCode = $this->getProcessingCode();
+
+        if (empty($processingCode)) {
+            return null;
+        }
+
+        $parts = explode('.', $processingCode);
+
+        return empty($parts[2]) ? null : $parts[2];
     }
 
     /**
