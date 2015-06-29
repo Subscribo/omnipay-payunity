@@ -4,7 +4,6 @@ namespace Omnipay\PayUnity\Message;
 
 use Omnipay\PayUnity\Message\GenericPostRequest;
 
-
 /**
  * Class PostRefundRequest
  *
