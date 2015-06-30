@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>POST void example page</title>
+        <title>Omnipay PayUnity driver POST void example page</title>
     </head>
     <body>
-        <h1>POST void purchase example page</h1>
+        <h1>Omnipay PayUnity driver POST void purchase example page</h1>
 <?php
 
 try {
@@ -14,11 +14,10 @@ try {
     /** @var \Omnipay\PayUnity\PostGateway $gateway */
     $gateway = \Omnipay\Omnipay::create('PayUnity\\Post');
     $gateway->setTestMode(true);
-    $gateway->setSecuritySender('696a8f0fabffea91517d0eb0a0bf9c33');
-    $gateway->setTransactionChannel('52275ebaf361f20a76b038ba4c806991');
-    $gateway->setUserLogin('1143238d620a572a726fe92eede0d1ab');
-    $gateway->setUserPwd('demo');
-
+    $gateway->setSecuritySender(getenv('PAYUNITY_SECURITY_SENDER') ?: '696a8f0fabffea91517d0eb0a0bf9c33');
+    $gateway->setTransactionChannel(getenv('PAYUNITY_TRANSACTION_CHANNEL') ?: '52275ebaf361f20a76b038ba4c806991');
+    $gateway->setUserLogin(getenv('PAYUNITY_USER_LOGIN') ?: '1143238d620a572a726fe92eede0d1ab');
+    $gateway->setUserPwd(getenv('PAYUNITY_USER_PWD') ?: 'demo');
 
     $request = $gateway->void();
     $request->setCardReference($cardReference);

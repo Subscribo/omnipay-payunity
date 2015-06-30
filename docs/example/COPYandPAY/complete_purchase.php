@@ -10,6 +10,8 @@
  * Code example for page for return url
  */
 
+$urlBase = getenv('PAYUNITY_DRIVER_FOR_OMNIPAY_EXAMPLES_URL_BASE') ?: 'https://your.site.example/path/to/examples';
+
 /** @var \Omnipay\PayUnity\COPYandPAYGateway $gateway */
 $gateway = \Omnipay\Omnipay::create('PayUnity\\COPYandPAY');
 
@@ -30,7 +32,7 @@ if ($response->isSuccessful()) {
     echo '<div>Identification Shopper ID:'.$response->getIdentificationShopperId().'</div>';
     echo '<div>Identification Transaction ID:'.$response->getIdentificationTransactionId().'</div>';
 ?>
-    <form action="https://your.site.example/example/Post/prepare" method="post">
+    <form action="<?php echo $urlBase; ?>/Post/prepare" method="post" target="_blank">
         <input type="hidden" name="reference" value="<?php echo $response->getCardReference(); ?>">
         <input type="hidden" name="transaction" value="<?php echo $response->getTransactionReference(); ?>">
         <button type="submit">Post operations</button>

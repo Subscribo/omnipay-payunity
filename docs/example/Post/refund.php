@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>POST refund example page</title>
+        <title>Omnipay PayUnity driver POST refund example page</title>
     </head>
     <body>
-        <h1>POST refund purchase example page</h1>
+        <h1>Omnipay PayUnity driver POST refund purchase example page</h1>
 <?php
 
-$urlBase = 'https://your.site.example/example/Post/';
+$urlBase = getenv('PAYUNITY_DRIVER_FOR_OMNIPAY_EXAMPLES_URL_BASE') ?: 'https://your.site.example/path/to/examples';
 
 try {
     $amount = 0.50;
@@ -18,10 +18,10 @@ try {
     /** @var \Omnipay\PayUnity\PostGateway $gateway */
     $gateway = \Omnipay\Omnipay::create('PayUnity\\Post');
     $gateway->setTestMode(true);
-    $gateway->setSecuritySender('696a8f0fabffea91517d0eb0a0bf9c33');
-    $gateway->setTransactionChannel('52275ebaf361f20a76b038ba4c806991');
-    $gateway->setUserLogin('1143238d620a572a726fe92eede0d1ab');
-    $gateway->setUserPwd('demo');
+    $gateway->setSecuritySender(getenv('PAYUNITY_SECURITY_SENDER') ?: '696a8f0fabffea91517d0eb0a0bf9c33');
+    $gateway->setTransactionChannel(getenv('PAYUNITY_TRANSACTION_CHANNEL') ?: '52275ebaf361f20a76b038ba4c806991');
+    $gateway->setUserLogin(getenv('PAYUNITY_USER_LOGIN') ?: '1143238d620a572a726fe92eede0d1ab');
+    $gateway->setUserPwd(getenv('PAYUNITY_USER_PWD') ?: 'demo');
 
 
     $request = $gateway->refund();
@@ -41,7 +41,7 @@ try {
     var_dump($response->getData());
     echo '</code>';
 ?>
-    <form action="<?php echo $urlBase; ?>refund" method="post" target="_blank">
+    <form action="<?php echo $urlBase; ?>/Post/refund" method="post" target="_blank">
         <label for="reference">Card reference:</label>
         <input type="text" name="reference" style="width:40em" value="<?php echo $cardReference ?>">
         <label for="reference">Transaction reference:</label>

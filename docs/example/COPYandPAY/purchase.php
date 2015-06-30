@@ -12,16 +12,17 @@
 
 $amount = '3.45';
 
+$urlBase = getenv('PAYUNITY_DRIVER_FOR_OMNIPAY_EXAMPLES_URL_BASE') ?: 'https://your.site.example/path/to/examples';
 
 /** @var \Omnipay\PayUnity\COPYandPAYGateway $gateway */
 $gateway = \Omnipay\Omnipay::create('PayUnity\\COPYandPAY');
 
 $gateway->initialize([
-    "securitySender" => "696a8f0fabffea91517d0eb0a0bf9c33",
-    "transactionChannel" => "52275ebaf361f20a76b038ba4c806991",
-    "userLogin" => "1143238d620a572a726fe92eede0d1ab",
+    "securitySender" => getenv('PAYUNITY_SECURITY_SENDER') ?: "696a8f0fabffea91517d0eb0a0bf9c33",
+    "transactionChannel" => getenv('PAYUNITY_TRANSACTION_CHANNEL') ?: "52275ebaf361f20a76b038ba4c806991",
+    "userLogin" => getenv('PAYUNITY_USER_LOGIN') ?: "1143238d620a572a726fe92eede0d1ab",
     "transactionMode" => "INTEGRATOR_TEST",
-    "userPwd" => "demo",
+    "userPwd" => getenv('PAYUNITY_USER_PWD') ?: "demo",
     'identificationShopperId' => 'Optional identification of customer',
     'identificationInvoiceId' => 'Optional identifier which you also might print on invoice',
     'identificationBulkId' => 'Optional identifier to group some transactions together',
@@ -53,7 +54,7 @@ $response = $gateway->purchase([
     'amount' => $amount,
     'currency' => 'EUR',
     'brands' => 'VISA MASTER MAESTRO SOFORTUEBERWEISUNG',
-    'returnUrl' => 'https://your.site.example/example/COPYandPAY/complete_purchase',
+    'returnUrl' => $urlBase.'/COPYandPAY/complete_purchase',
     'transactionId' => 'Optional identification of this transaction',
     'presentationUsage' => 'Optional: Just for testing',
     'paymentMemo' => 'Optional MEMO',
