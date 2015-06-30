@@ -2,9 +2,10 @@
 
 namespace Omnipay\PayUnity;
 
+use Monolog\Logger;
+use Monolog\Handler\RotatingFileHandler;
 use Omnipay\Tests\GatewayTestCase;
 use Omnipay\PayUnity\COPYandPAYGateway;
-use Guzzle\Log\MessageFormatter;
 use Omnipay\PayUnity\Message\CopyAndPayPurchaseResponse;
 use Omnipay\PayUnity\Message\CopyAndPayCompletePurchaseResponse;
 
@@ -22,14 +23,14 @@ class CopyAndPayGatewayOnlineTest extends GatewayTestCase
 
         $this->gateway = new COPYandPAYGateway($this->getHttpClient(), $this->getHttpRequest());
         $this->gateway->setTestMode(true);
-        $this->logger = new \Monolog\Logger('UnitTest logger');
-        $this->logger->pushHandler(new \Monolog\Handler\RotatingFileHandler(__DIR__.'/../../tmp/logs/unit-tests.log'));
+        $this->logger = new Logger('UnitTest logger');
+        $this->logger->pushHandler(new RotatingFileHandler(__DIR__.'/../../tmp/logs/unit-tests.log'));
         $this->gateway->attachPsrLogger($this->logger);
 
-        $this->gateway->setSecuritySender('696a8f0fabffea91517d0eb0a0bf9c33');
-        $this->gateway->setTransactionChannel('52275ebaf361f20a76b038ba4c806991');
-        $this->gateway->setUserLogin('1143238d620a572a726fe92eede0d1ab');
-        $this->gateway->setUserPwd('demo');
+        $this->gateway->setSecuritySender(getenv('PAYUNITY_SECURITY_SENDER') ?: '696a8f0fabffea91517d0eb0a0bf9c33');
+        $this->gateway->setTransactionChannel(getenv('PAYUNITY_TRANSACTION_CHANNEL') ?: '52275ebaf361f20a76b038ba4c806991');
+        $this->gateway->setUserLogin(getenv('PAYUNITY_USER_LOGIN') ?: '1143238d620a572a726fe92eede0d1ab');
+        $this->gateway->setUserPwd(getenv('PAYUNITY_USER_PWD') ?: 'demo');
         $this->gateway->setIdentificationShopperId('Shopper 13245');
         $this->options = array(
             'amount' => '10.00',
