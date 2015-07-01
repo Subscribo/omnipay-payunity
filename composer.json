@@ -39,7 +39,7 @@
     },
     "require": {
         "php": "^5.4 || 7.0@dev",
-        "omnipay/common": "^2.3.2",
+        "omnipay/common": "^2.3.4",
         "psr/http-message": "^1.0",
         "egeloen/http-adapter": "^0.8@dev",
         "subscribo/omnipay-subscribo-shared": "^0.3.4",
@@ -47,7 +47,8 @@
     },
     "require-dev": {
         "omnipay/tests": "^2.0",
-        "monolog/monolog": "^1.13.1"
+        "monolog/monolog": "^1.13.1",
+        "symfony/http-foundation": "~2.1"
     },
     "extra": {
         "branch-alias": {
