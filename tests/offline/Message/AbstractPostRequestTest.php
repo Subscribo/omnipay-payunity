@@ -96,7 +96,6 @@ class AbstractPostRequestTest extends TestCase
         $this->assertSame($request, $request->setPaymentMemo('some memo'));
         $this->assertSame('some memo', $request->getPaymentMemo());
 
-
         $this->assertSame($request, $request->setIdentificationTransactionId(null));
         $this->assertSame($request, $request->setTransactionReference(null));
         $this->assertSame($request, $request->setCardReference(null));
@@ -176,7 +175,6 @@ class AbstractPostRequestTest extends TestCase
         ];
         $this->assertSame($expected, $request->getData());
     }
-
 
     public function testPrepareDataExtended()
     {
@@ -272,6 +270,24 @@ class AbstractPostRequestTest extends TestCase
         ];
         $this->assertSame($expected, $request->getData());
     }
+
+
+    public function testProcessHttpResponse()
+    {
+        $mockHttpResponse = $this->getMockForAbstractClass('\\Psr\\Http\\Message\\ResponseInterface', [], '', false);
+        $expectedResult = $this->getMockForAbstractClass('\\Psr\\Http\\Message\\ResponseInterface', [], '', false);
+        $mockHttpResponse->expects($this->once())
+            ->method('getHeaderLine')
+            ->with('Content-Type')
+            ->will($this->returnValue('text/plain'));
+        $mockHttpResponse->expects($this->once())
+            ->method('withHeader')
+            ->with('Content-Type', 'application/x-www-form-urlencoded')
+            ->will($this->returnValue($expectedResult));
+        $request = new ExtendedAbstractPostRequestForTesting($this->getHttpClient(), $this->getHttpRequest());
+        $response2 = $request->testMethodProcessHttpResponse($mockHttpResponse);
+        $this->assertSame($expectedResult, $response2);
+    }
 }
 
 
@@ -292,18 +308,27 @@ class ExtendedAbstractPostRequestForTesting extends AbstractPostRequest
         return new GenericPostResponse($this, $data, $httpStatusCode);
     }
 
+
     public function testMethodGetEndpointUrl($data)
     {
         return $this->getEndpointUrl($data);
     }
+
 
     public function testMethodGetHttpRequestHeaders($data)
     {
         return $this->getHttpRequestHeaders($data);
     }
 
+
     public function testMethodChooseTransactionMode()
     {
         return $this->chooseTransactionMode();
+    }
+
+
+    public function testMethodProcessHttpResponse($httpResponse)
+    {
+        return $this->processHttpResponse($httpResponse);
     }
 }
