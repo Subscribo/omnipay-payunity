@@ -220,7 +220,6 @@ Post gateway responses as well as `CopyAndPayCompletePurchase` response have als
 * `getProcessingCode()`
 * `getProcessingReasonCode()`
 * `getProcessingReturnCode()`
-* `getProcessingResultCode()`
 * `getProcessingStatusCode()`
 * `getProcessingPaymentCode()`
 * `getPostValidationErrorCode()`
@@ -243,6 +242,11 @@ For example code see:
 * [Post void page](docs/example/Post/void.php)
 * [Post refund page](docs/example/Post/refund.php)
 
+To run full workflow of example code you need to set up you routing mechanism to actually reach those examples,
+provide your valid API credentials as environment variables
+PAYUNITY_USER_LOGIN, PAYUNITY_USER_PWD, PAYUNITY_SECURITY_SENDER, PAYUNITY_TRANSACTION_CHANNEL and
+PAYUNITY_DRIVER_FOR_OMNIPAY_EXAMPLES_URL_BASE containing url base to your examples.
+(or you can provide these data by modifying your copy of example code itself)
 
 ### General instructions
 
@@ -264,6 +268,13 @@ If you want to run offline (not requiring internet connection) tests only, run:
 ```sh
     phpunit tests/offline
 ```
+
+For some online tests you might need to provide following environment variables, containing your API credentials:
+PAYUNITY_USER_LOGIN, PAYUNITY_USER_PWD, PAYUNITY_SECURITY_SENDER, PAYUNITY_TRANSACTION_CHANNEL and
+PAYUNITY_DRIVER_FOR_OMNIPAY_TESTING_ACCOUNT_REGISTRATION_REFERENCE containing registration reference string,
+which you can create e.g. via using example code for COPYandPAY workflow
+(with environment variables with the same API credentials).
+It should be displayed as  Card Reference on [COPYandPAY Complete purchase page](docs/example/COPYandPAY/complete_purchase.php).
 
 ## Support
 
