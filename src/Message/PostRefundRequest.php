@@ -14,4 +14,12 @@ use Omnipay\PayUnity\Message\GenericPostRequest;
 class PostRefundRequest extends GenericPostRequest
 {
     protected $defaultPaymentType = 'RF';
+
+
+    public function getData()
+    {
+        $this->validate('amount', 'currency');
+
+        return parent::getData();
+    }
 }

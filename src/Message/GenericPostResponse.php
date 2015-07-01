@@ -20,8 +20,7 @@ class GenericPostResponse extends AbstractResponse
 
     public function getCode()
     {
-        return (($this->getProcessingStatusCode() ?: $this->getExtractedProcessingStatusCode())
-                    ?: $this->getPostValidationErrorCode());
+        return $this->acquireProcessingStatusCode() ?: $this->getPostValidationErrorCode();
     }
 
     public function getMessage()
@@ -130,14 +129,6 @@ class GenericPostResponse extends AbstractResponse
     /**
      * @return string|null
      */
-    public function getProcessingResultCode()
-    {
-        return $this->getTransactionData('processing.result.code');
-    }
-
-    /**
-     * @return string|null
-     */
     public function getProcessingReasonCode()
     {
         return $this->getTransactionData('processing.reason.code');
@@ -173,6 +164,16 @@ class GenericPostResponse extends AbstractResponse
     public function getPostValidationErrorCode()
     {
         return $this->getTransactionData('post.validation');
+    }
+
+    /**
+     * Tries to get Processing Status Code, either directly or extract it from Processing Code
+     *
+     * @return string|null
+     */
+    public function acquireProcessingStatusCode()
+    {
+        return $this->getProcessingStatusCode() ?: $this->getExtractedProcessingStatusCode();
     }
 
     /**
