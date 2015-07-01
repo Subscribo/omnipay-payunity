@@ -57,7 +57,9 @@ class AccountRegistrationReference
         $decoded = base64_decode($encodedAccountRegistrationReference, true);
         $parsed = json_decode($decoded, true, 2, JSON_BIGINT_AS_STRING);
         if (empty($parsed)) {
-            throw new InvalidArgumentException('Provided parameter does not contain valid encoded AccountRegistrationReference');
+            throw new InvalidArgumentException(
+                'Provided parameter does not contain valid encoded AccountRegistrationReference'
+            );
         }
         $this->accountRegistration = $parsed['ar'];
         $this->paymentCode = $parsed['pc'];
