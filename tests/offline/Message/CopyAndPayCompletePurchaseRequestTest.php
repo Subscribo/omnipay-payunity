@@ -15,6 +15,7 @@ class CopyAndPayCompletePurchaseRequestTest extends TestCase
         $this->request->setTestMode(true);
     }
 
+
     public function testGetData()
     {
         $purchaseResponse = $this->getMockBuilder('Omnipay\\PayUnity\\Message\\CopyAndPayPurchaseResponse')
@@ -27,6 +28,7 @@ class CopyAndPayCompletePurchaseRequestTest extends TestCase
         $data = $this->request->getData();
         $this->assertSame('33E47BC8E286B472A1299EAC39F4556D.sbg-vm-fe01', $data['transactionToken']);
     }
+
 
     public function testGetTokenFromHttpRequest()
     {

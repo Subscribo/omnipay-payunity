@@ -22,6 +22,7 @@ class CopyAndPayWidgetTest extends PHPUnit_Framework_TestCase
         }
     }
 
+
     public function testEmptyConstruct()
     {
         $widget = new CopyAndPayWidget();
@@ -156,6 +157,7 @@ class CopyAndPayWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertFalse($widget->isRenderable());
     }
 
+
     public function testConstructWithParameters()
     {
         $widget = new CopyAndPayWidget([
@@ -202,7 +204,6 @@ class CopyAndPayWidgetTest extends PHPUnit_Framework_TestCase
         $this->assertTrue($widget->getLoadCompressedJavascript());
         $this->assertSame($widget, $widget->setLoadJavascriptAsynchronously(true));
         $this->assertTrue($widget->getLoadJavascriptAsynchronously());
-
     }
 
     /**

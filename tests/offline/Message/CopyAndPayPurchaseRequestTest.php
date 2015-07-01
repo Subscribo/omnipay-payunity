@@ -65,6 +65,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->card['shippingCity'] = 'Berlin';
     }
 
+
     public function testGetDataDefault()
     {
         $request = new CopyAndPayPurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
@@ -119,6 +120,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.EMAIL', $data);
     }
 
+
     public function testRegistrationMode()
     {
         $options = $this->options;
@@ -133,6 +135,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $data2 = $request2->getData();
         $this->assertSame('RB', $data2['PAYMENT.TYPE']);
     }
+
 
     public function testGetDataExtended()
     {
@@ -189,6 +192,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.MOBILE', $data);
         $this->assertArrayNotHasKey('CUSTOMER.SHIPPING.CONTACT.EMAIL', $data);
     }
+
 
     public function testGetDataCard()
     {
@@ -250,12 +254,14 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertSame('https://my.site.example/redirect/url', $request->getReturnUrl());
     }
 
+
     public function testGetBrands()
     {
         $request = new CopyAndPayPurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
         $request->initialize($this->extendedOptions);
         $this->assertSame('VISA MAESTRO MASTER', $request->getBrands());
     }
+
 
     public function testSetBrands()
     {
@@ -275,6 +281,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertSame(['VISA', "MAESTRO", 'MASTER'], $request->getBrands());
     }
 
+
     public function testSetPresentationUsage()
     {
         $request = new CopyAndPayPurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
@@ -283,6 +290,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertSame($request, $request->setPresentationUsage($value));
         $this->assertSame($value, $request->getPresentationUsage());
     }
+
 
     public function testSetPaymentMemo()
     {
@@ -293,6 +301,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertSame($value, $request->getPaymentMemo());
     }
 
+
     public function testSetPaymentType()
     {
         $request = new CopyAndPayPurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
@@ -301,6 +310,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertSame($request, $request->setPaymentType($value));
         $this->assertSame($value, $request->getPaymentType($value));
     }
+
 
     public function testSetIdentificationReferenceId()
     {
@@ -311,6 +321,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertSame($value, $request->getIdentificationReferenceId());
         $this->assertNull($request->getCardReference());
     }
+
 
     public function testSetCardReference()
     {

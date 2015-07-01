@@ -116,7 +116,6 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame('90', $response->getCode());
         $this->assertSame("Successful Processing : Request successfully processed in 'Merchant in Integrator Test Mode'", $response->getMessage());
 
-
         $this->assertSame($transactionId, $response->getTransactionId());
         $this->assertSame($transactionId, $response->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $response->getIdentificationShopperId());
@@ -137,6 +136,7 @@ class PostGatewayOnlineTest extends GatewayTestCase
     /**
      * @depends testVoidSuccess
      * @param string $transactionReference
+     * @return string
      */
     public function testVoidFailure($transactionReference)
     {
@@ -168,7 +168,6 @@ class PostGatewayOnlineTest extends GatewayTestCase
 
         $this->assertSame('70', $response->getCode());
         $this->assertSame("Reference Error : cannot reverse (already refunded|reversed or invalid workflow?)", $response->getMessage());
-
 
         $this->assertSame($transactionId, $response->getTransactionId());
         $this->assertSame($transactionId, $response->getIdentificationTransactionId());
@@ -270,7 +269,6 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame('90', $refundResponse1->getCode());
         $this->assertSame("Successful Processing : Request successfully processed in 'Merchant in Integrator Test Mode'", $refundResponse1->getMessage());
 
-
         $this->assertSame($refund1TransactionId, $refundResponse1->getTransactionId());
         $this->assertSame($refund1TransactionId, $refundResponse1->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $refundResponse1->getIdentificationShopperId());
@@ -332,6 +330,7 @@ class PostGatewayOnlineTest extends GatewayTestCase
 
         return $transactionReference;
     }
+
 
     /**
      * @depends testRefundSuccess

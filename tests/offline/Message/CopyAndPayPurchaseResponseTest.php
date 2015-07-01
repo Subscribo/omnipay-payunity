@@ -18,6 +18,7 @@ class CopyAndPayPurchaseResponseTest extends TestCase
         $this->request->setTestMode(true);
     }
 
+
     public function testTransactionToken()
     {
         $response = new CopyAndPayPurchaseResponse(
@@ -38,6 +39,7 @@ class CopyAndPayPurchaseResponseTest extends TestCase
         $this->assertSame('A550D17DC663DFA8973CCAB8A117669A.sbg-vm-fe01', $response->getTransactionToken());
         $this->assertNull($response->getTransactionReference());
     }
+
 
     public function testEmptyTransactionToken()
     {

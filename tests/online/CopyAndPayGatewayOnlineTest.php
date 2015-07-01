@@ -52,7 +52,6 @@ class CopyAndPayGatewayOnlineTest extends GatewayTestCase
         $this->card['gender'] = 'M';
         $this->card['birthday'] = '1970-01-01';
         $this->card['company'] = 'Company name Inc.';
-
     }
 
     /**
@@ -95,6 +94,7 @@ class CopyAndPayGatewayOnlineTest extends GatewayTestCase
         $this->assertEmpty($response->getMessage());
         $this->assertEmpty($response->getCode());
         $this->assertEmpty($response->getTransactionReference());
+
         return $response;
     }
 
@@ -121,6 +121,7 @@ class CopyAndPayGatewayOnlineTest extends GatewayTestCase
         $this->assertEmpty($response->getIdentificationUniqueId());
         $this->assertEmpty($response->getIdentificationShortId());
     }
+
 
     public function testConnectorModePurchase()
     {
@@ -186,7 +187,6 @@ class CopyAndPayGatewayOnlineTest extends GatewayTestCase
         $this->assertEmpty($response->getIdentificationShortId());
     }
 
-
     /**
      * @expectedException \InvalidArgumentException
      * @expectedException \Subscribo\Omnipay\Shared\Exception\WidgetInvalidRenderingParametersException
@@ -242,6 +242,7 @@ class CopyAndPayGatewayOnlineTest extends GatewayTestCase
         $this->assertInstanceOf('\\Omnipay\\PayUnity\\Widget\\CopyAndPayWidget', $widget);
         $widget->render(['brands' => 'VISA MAESTRO']);
     }
+
 
     public function testInvalidTokenCompletePurchase()
     {

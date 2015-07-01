@@ -42,7 +42,6 @@ class CopyAndPayGatewayTest extends GatewayTestCase
         $this->card['gender'] = 'M';
         $this->card['birthday'] = '1970-01-01';
         $this->card['company'] = 'Company name Inc.';
-
     }
 
     /**
