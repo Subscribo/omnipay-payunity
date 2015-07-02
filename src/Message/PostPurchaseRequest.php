@@ -2,23 +2,16 @@
 
 namespace Omnipay\PayUnity\Message;
 
-use Omnipay\PayUnity\Message\GenericPostRequest;
+use Omnipay\PayUnity\Message\RequiringAmountPostRequest;
 
 /**
  * Class PostPurchaseRequest
  *
  * @package Omnipay\PayUnity
  */
-class PostPurchaseRequest extends GenericPostRequest
+class PostPurchaseRequest extends RequiringAmountPostRequest
 {
     protected $defaultPaymentType = 'DB';
 
     protected $addCardReferenceMode = 'full';
-
-    public function getData()
-    {
-        $this->validate('amount', 'currency');
-
-        return parent::getData();
-    }
 }
