@@ -170,7 +170,7 @@ class GenericPostRequestTest extends TestCase
         $request->setAddCardReferenceMode(null);
         $this->assertSame($this->expectedData, $request->getData());
         $expected3 = $this->expectedData;
-        $expected3['PAYMENT.CODE'] = 'AA.BB';
+        $expected3['PAYMENT.CODE'] = 'AA.DB';
         $expected3['ACCOUNT.REGISTRATION'] = 'test2';
         $request->setAddCardReferenceMode('full');
         $this->assertSame($expected3, $request->getData());

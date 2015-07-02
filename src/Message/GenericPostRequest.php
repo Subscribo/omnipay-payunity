@@ -121,14 +121,11 @@ class GenericPostRequest extends AbstractPostRequest
             return $data;
         }
 
-        switch($this->addCardReferenceMode) {
-            case 'paymentMethodOnly':
-                $paymentType = $this->getPaymentType() ?: $this->defaultPaymentType;
-                $data['PAYMENT.CODE'] = $this->changePaymentTypeInCode($reference->paymentCode, $paymentType);
-                break;
-            case 'full':
+        $paymentType = $this->getPaymentType() ?: $this->defaultPaymentType;
+        $data['PAYMENT.CODE'] = $this->changePaymentTypeInCode($reference->paymentCode, $paymentType);
+
+        if ($this->addCardReferenceMode ===  'full') {
                 $data['ACCOUNT.REGISTRATION'] = $reference->accountRegistration;
-                $data['PAYMENT.CODE'] = $reference->paymentCode;
         }
 
         return $data;

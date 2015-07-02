@@ -57,7 +57,7 @@ class PostPurchaseRequestTest extends TestCase
         $this->assertSame($this->request, $this->request->setCurrency('EUR'));
         $this->assertSame($this->request, $this->request->setCardReference('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9'));
         $expected = $this->expectedData;
-        $expected['PAYMENT.CODE'] = 'AA.BB';
+        $expected['PAYMENT.CODE'] = 'AA.DB';
         $expected['ACCOUNT.REGISTRATION'] = 'test2';
         $this->assertSame($expected, $this->request->getData());
     }
