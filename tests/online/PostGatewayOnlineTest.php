@@ -136,7 +136,6 @@ class PostGatewayOnlineTest extends GatewayTestCase
     /**
      * @depends testVoidSuccess
      * @param string $transactionReference
-     * @return string
      */
     public function testVoidFailure($transactionReference)
     {
@@ -182,8 +181,6 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame('70', $response->getProcessingStatusCode());
         $this->assertSame('CC.RV', $response->getPaymentCode());
         $this->assertSame('700.400.300', $response->getProcessingReturnCode());
-
-        return $transactionReference;
     }
 
     /**
