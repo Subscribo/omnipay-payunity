@@ -380,4 +380,158 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame('CC.RF', $refundResponse3->getPaymentCode());
         $this->assertSame('700.400.200', $refundResponse3->getProcessingReturnCode());
     }
+
+    /**
+     * @return Message\GenericPostResponse
+     */
+    public function testAuthorizeSuccess()
+    {
+        if (empty($this->accountRegistrationReference)) {
+            $this->markTestSkipped('Account registration reference not set');
+        }
+        $request = $this->gateway->authorize();
+        $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\PostAuthorizeRequest', $request);
+        /** @var \Omnipay\PayUnity\Message\PostAuthorizeRequest $request  */
+        $request->setAmount('1.20');
+        $request->setCurrency('EUR');
+        $request->setCardReference($this->accountRegistrationReference);
+        $transactionId = 'TEST_AUTHORIZE_'.uniqid();
+        $invoiceId = 'Test authorize invoice ID'.uniqid();
+        $request->setTransactionId($transactionId);
+        $request->setPaymentMemo('Test authorization using token');
+        $request->setIdentificationBulkId('Test authorize Bulk ID 123');
+        $request->setIdentificationInvoiceId($invoiceId);
+        $response = $request->send();
+
+        $this->checkSuccessfulResponse($response, $request);
+        /** @var  \Omnipay\PayUnity\Message\GenericPostResponse $response */
+        $this->assertSame('CC.PA.90.00', $response->getProcessingCode());
+        $this->assertSame('CC.PA', $response->getPaymentCode());
+        
+        $referenceContainer = AccountRegistrationReference::rebuild($this->accountRegistrationReference);
+        $this->assertSame($referenceContainer->accountRegistration, $response->getAccountRegistration());
+
+        return $response;
+    }
+
+    /**
+     * @depends testAuthorizeSuccess
+     * @param \Omnipay\PayUnity\Message\GenericPostResponse $response
+     * @return null|string
+     */
+    public function testCaptureSuccess($response)
+    {
+        $this->checkCaptureSuccess($response);
+        $this->checkCaptureSuccess($response);
+        return $response;
+    }
+
+    /**
+     * @depends testAuthorizeSuccess
+     * @param \Omnipay\PayUnity\Message\GenericPostResponse $response
+     */
+    public function testCaptureFailure($response)
+    {
+        $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostResponse', $response);
+        $request = $this->gateway->capture();
+        $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\PostCaptureRequest', $request);
+        /** @var \Omnipay\PayUnity\Message\PostCaptureRequest $request  */
+        $request->fill($response);
+        $request->setAmount('0.50');
+        $request->setCurrency('EUR');
+        $transactionId = 'TEST_CAPTURE_FAILURE_'.uniqid();
+        $invoiceId = 'Test capture failure invoice ID'.uniqid();
+        $request->setTransactionId($transactionId);
+        $request->setPaymentMemo('Test capturing');
+        $request->setIdentificationBulkId('Test capture Bulk ID 123');
+        $request->setIdentificationInvoiceId($invoiceId);
+        $response = $request->send();
+
+        $this->checkGenericPostResponse($response, $request);
+
+        /** @var  \Omnipay\PayUnity\Message\GenericPostResponse $response */
+        $this->assertFalse($response->isSuccessful());
+
+        $this->assertSame('70', $response->getCode());
+        $this->assertSame("Reference Error : cannot capture (PA value exceeded, PA reverted or invalid workflow?)", $response->getMessage());
+
+        $this->assertSame('30', $response->getProcessingReasonCode());
+        $this->assertSame('CC.CP.70.30', $response->getProcessingCode());
+        $this->assertSame('Reference Error', $response->getProcessingReason());
+        $this->assertSame("cannot capture (PA value exceeded, PA reverted or invalid workflow?)", $response->getProcessingReturn());
+        $this->assertSame('NOK', $response->getProcessingResult());
+        $this->assertSame('70', $response->getProcessingStatusCode());
+        $this->assertSame('CC.CP', $response->getPaymentCode());
+        $this->assertSame('700.400.100', $response->getProcessingReturnCode());
+    }
+
+    /**
+     * @param \Omnipay\PayUnity\Message\GenericPostResponse $response
+     */
+    protected function checkCaptureSuccess($response)
+    {
+        $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostResponse', $response);
+        $request = $this->gateway->capture();
+        $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\PostCaptureRequest', $request);
+        /** @var \Omnipay\PayUnity\Message\PostCaptureRequest $request  */
+        $request->fill($response);
+        $request->setAmount('0.50');
+        $request->setCurrency('EUR');
+        $transactionId = 'TEST_CAPTURE_'.uniqid();
+        $invoiceId = 'Test capture invoice ID'.uniqid();
+        $request->setTransactionId($transactionId);
+        $request->setPaymentMemo('Test capturing');
+        $request->setIdentificationBulkId('Test capture Bulk ID 123');
+        $request->setIdentificationInvoiceId($invoiceId);
+        $response = $request->send();
+
+        $this->checkSuccessfulResponse($response, $request);
+
+        $this->assertSame('CC.CP.90.00', $response->getProcessingCode());
+        $this->assertSame('CC.CP', $response->getPaymentCode());
+    }
+
+
+    protected function checkSuccessfulResponse($response, $request)
+    {
+        $this->checkGenericPostResponse($response, $request);
+
+        /** @var  \Omnipay\PayUnity\Message\GenericPostResponse $response */
+        $this->assertTrue($response->isSuccessful());
+
+        $this->assertSame('90', $response->getCode());
+        $this->assertSame("Successful Processing : Request successfully processed in 'Merchant in Integrator Test Mode'", $response->getMessage());
+        $this->assertSame('90', $response->getProcessingStatusCode());
+        $this->assertSame('00', $response->getProcessingReasonCode());
+        $this->assertSame('000.100.110', $response->getProcessingReturnCode());
+        $this->assertSame('ACK', $response->getProcessingResult());
+        $this->assertSame('Successful Processing', $response->getProcessingReason());
+        $this->assertSame("Request successfully processed in 'Merchant in Integrator Test Mode'", $response->getProcessingReturn());
+    }
+
+
+    protected function checkGenericPostResponse($response, $request)
+    {
+        $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostRequest', $request);
+        /** @var \Omnipay\PayUnity\Message\GenericPostRequest $request */
+        $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostResponse', $response);
+        /** @var  \Omnipay\PayUnity\Message\GenericPostResponse $response */
+        $this->assertFalse($response->isWaiting());
+        $this->assertFalse($response->isTransactionToken());
+        $this->assertFalse($response->haveWidget());
+        $this->assertFalse($response->isRedirect());
+        $this->assertFalse($response->isTransparentRedirect());
+        $this->assertNull($response->getWidget());
+
+        $newTransactionReference = $response->getTransactionReference();
+        $this->assertNotEmpty($newTransactionReference);
+        $this->assertNotSame($request->getTransactionReference(), $newTransactionReference);
+        $this->assertSame($newTransactionReference, $response->getIdentificationUniqueId());
+
+        $this->assertSame($request->getTransactionId(), $response->getTransactionId());
+        $this->assertSame($response->getTransactionId(), $response->getIdentificationTransactionId());
+        $this->assertSame('Test shopper', $response->getIdentificationShopperId());
+        $this->assertNotEmpty($response->getIdentificationShortId());
+        $this->assertSame('ACK', $response->getPostValidationErrorCode());
+    }
 }

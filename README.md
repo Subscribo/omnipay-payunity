@@ -13,6 +13,7 @@ Omnipay PayUnity driver version | PayUnity COPYandPAY version | Post Gateway
 ------------------------------- | --------------------------- | -----------------------------------------------
 0.2.x                           | 4                           | No
 0.3.x                           | 4                           | purchase() with token billing, refund(), void()
+0.4.x                           | 4                           | also authorize() and capture()
 
 ## Installation
 
@@ -20,10 +21,21 @@ Omnipay PayUnity driver (beta version) is installed via [Composer](http://getcom
 To install, add it to your `composer.json` file
 (you might need to add also development version of egeloen/http-adapter):
 
+for beta version:
 ```json
 {
     "require": {
         "subscribo/omnipay-payunity": "^0.3.0",
+        "egeloen/http-adapter": "^0.8@dev"
+    }
+}
+```
+
+for development (less stable) version:
+```json
+{
+    "require": {
+        "subscribo/omnipay-payunity": "0.4.*@dev",
         "egeloen/http-adapter": "^0.8@dev"
     }
 }
@@ -168,13 +180,16 @@ For other methods see [Post and CopyAndPayCompletePurchase responses](#post-and-
 
 Gateway `PayUnity\Post` contains following methods:
 
-* [`purchase()`](#method-purchase-1)
+* [`purchase()`](#method-purchase-and-authorize)
+* [`authorize()`](#method-purchase-and-authorize)
+* [`capture()`](#method-capture)
 * [`void()`](#methods-void-and-refund)
 * [`refund()`](#methods-void-and-refund)
 
-#### Method `purchase()`
+#### Method `purchase()` and `authorize()`
 
-Following parameters are needed (either as argument of `purchase()` method or set via setters on `PostPurchaseRequest` returned:
+Following parameters are needed (either as argument of `purchase()` / `authorize()` method
+or set via setters on `PostPurchaseRequest` / `PostAuthorizeRequest` returned):
 
 * `amount`
 * `currency` (e.g. 'EUR')
@@ -182,6 +197,19 @@ Following parameters are needed (either as argument of `purchase()` method or se
 In order to use tokens returned by getCardReference() from `CopyAndPayCompleteResponse`,
 you need to provide them to `PostPurchaseRequest` either via parameter during `purchase(['cardReference' => '...']);` call
 or using `setCardReference()` setter.
+
+#### Method `capture()`
+
+Required parameters:
+
+* `amount`
+* `currency`
+* `transactionReference`
+
+You may optionally specify transaction method ('CC', 'DD', ...), either directly via `setPaymentMethod()`
+or indirectly, using reference stored in registration token via `setCardReference()` method.
+
+For setting `transactionReference` and `cardReference` you may use also method [`fill()`](#method-fill)
 
 #### Methods `void()` and `refund()`
 
