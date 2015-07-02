@@ -195,6 +195,46 @@ or indirectly, using reference stored in registration token via `setCardReferenc
 
 Method `refund()` needs also `amount` and `currency` parameters.
 
+#### Post requests
+
+Post gateway requests - GenericPostRequests and its subclasses (PostPurchaseRequest, PostRefundRequest, PostVoidRequest)
+have these parameters (and corresponding setter getter methods):
+* [Parameters inherited from Post gateway](#basic-usage)
+* `transactionId` alias for `identificationTransactionId`
+* `transactionReference` alias for `identificationReferenceId`
+* `presentationUsage`
+* `paymentMemo`
+* `paymentCode`
+* `paymentType`
+* `paymentMethod` (inherited from common Omnipay interface)
+
+And also other parameters inherited from common Omnipay interface,
+such as `card`, `cardReference`, `amount`, `currency`...
+
+Parameters `amount` and `currency` are required for PostPurchaseRequest and PostRefundRequest.
+
+Parameter `cardReference` and/or `transactionReference` is required for proper processing of all Post gateway requests.
+
+Payment code is computed using values from provided `paymentCode`, `paymentType`, `paymentMethod`, `cardReference`
+parameters and default values. Default values and particular payment code computing algorithm
+is specific to particular request class.
+
+Besides methods inherited from common Omnipay interface (such as `send()` or `initialize()`),
+Post gateway requests provide method `fill()` to make chaining requests easier.
+
+##### Method `fill()`
+
+Method `fill()` accepts two arguments:
+* `$response` - and instance of `GenericPostResponse`
+* `$fillMode` - optional, integer (1, 2 or 3), specifying which parameters should be set. Available constants:
+    * `GenericPostRequests::FILL_MODE_TRANSACTION_REFERENCE`
+    * `GenericPostRequests::FILL_MODE_CARD_REFERENCE`
+    * `GenericPostRequests::FILL_MODE_ALL` (default)
+
+Depending on `$fillMode`, `cardReference` and/or `transactionReference` parameters are being set on request,
+on which this method has been used, using values from provided `$response` object.
+If the value provided evaluates as empty, the particular parameter is left intact.
+
 #### Post and CopyAndPayCompletePurchase responses
 
 Post gateway responses as well as `CopyAndPayCompletePurchase` response have also following methods:

@@ -44,6 +44,104 @@ class GenericPostRequestTest extends TestCase
     }
 
 
+    public function testFill()
+    {
+        $request1 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
+        $this->assertNull($request1->getTransactionReference());
+        $this->assertNull($request1->getCardReference());
+        $mockBuilder = $this->getMockBuilder('\\Omnipay\\PayUnity\\Message\\GenericPostResponse')
+                            ->disableOriginalConstructor();
+        $mockResponse1 = $mockBuilder->getMock();
+        $mockResponse1->expects($this->once())->method('getTransactionReference')
+            ->will($this->returnValue('some_transaction_reference'));
+        $mockResponse1->expects($this->once())->method('getCardReference')
+            ->will($this->returnValue('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9'));
+        $request1->fill($mockResponse1);
+        $this->assertSame('some_transaction_reference', $request1->getTransactionReference());
+        $this->assertSame('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9', $request1->getCardReference());
+
+        $mockResponse2 = $mockBuilder->getMock();
+        $mockResponse2->expects($this->any())->method('getTransactionReference')
+            ->will($this->returnValue('another_transaction_reference'));
+        $mockResponse2->expects($this->any())->method('getCardReference')
+            ->will($this->returnValue(''));
+        $request2 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
+        $request2->fill($mockResponse2, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertSame('another_transaction_reference', $request2->getTransactionReference());
+        $this->assertNull($request2->getCardReference());
+
+        $request1->fill($mockResponse2);
+        $this->assertSame('another_transaction_reference', $request1->getTransactionReference());
+        $this->assertSame('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9', $request1->getCardReference());
+
+        $mockResponse3 = $mockBuilder->getMock();
+        $mockResponse3->expects($this->once())->method('getTransactionReference')
+            ->will($this->returnValue('some_transaction_reference'));
+        $mockResponse3->expects($this->never())->method('getCardReference');
+        $request3 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
+        $request3->fill($mockResponse3, GenericPostRequest::FILL_MODE_TRANSACTION_REFERENCE);
+        $this->assertSame('some_transaction_reference', $request3->getTransactionReference());
+        $this->assertNull($request3->getCardReference());
+
+        $mockResponse4 = $mockBuilder->getMock();
+        $mockResponse4->expects($this->never())->method('getTransactionReference');
+        $mockResponse4->expects($this->once())->method('getCardReference')
+            ->will($this->returnValue('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9'));
+        $request4 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
+        $request4->fill($mockResponse4, GenericPostRequest::FILL_MODE_CARD_REFERENCE);
+        $this->assertNull($request4->getTransactionReference());
+        $this->assertSame('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9', $request4->getCardReference());
+
+        $mockResponse5 = $mockBuilder->getMock();
+        $mockResponse5->expects($this->once())->method('getTransactionReference')
+            ->will($this->returnValue('0'));
+        $mockResponse5->expects($this->never())->method('getCardReference');
+        $request5 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
+        $request5->fill($mockResponse5, GenericPostRequest::FILL_MODE_TRANSACTION_REFERENCE);
+        $this->assertNull($request5->getTransactionReference());
+        $this->assertNull($request5->getCardReference());
+
+        $mockResponse6 = $mockBuilder->getMock();
+        $mockResponse6->expects($this->any())->method('getTransactionReference')
+            ->will($this->returnValue(null));
+        $mockResponse6->expects($this->any())->method('getCardReference')
+            ->will($this->returnValue(null));
+        $request6 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
+        $request6->fill($mockResponse6);
+        $this->assertNull($request6->getTransactionReference());
+        $this->assertNull($request6->getCardReference());
+
+        $request1->fill($mockResponse6);
+        $this->assertSame('another_transaction_reference', $request1->getTransactionReference());
+        $this->assertSame('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9', $request1->getCardReference());
+
+        $mockResponse7 = $mockBuilder->getMock();
+        $mockResponse7->expects($this->never())->method('getTransactionReference');
+        $mockResponse7->expects($this->never())->method('getCardReference');
+        $request7 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
+        $request7->fill($mockResponse7, false);
+        $this->assertNull($request7->getTransactionReference());
+        $this->assertNull($request7->getCardReference());
+
+        $mockResponse8 = $mockBuilder->getMock();
+        $mockResponse8->expects($this->any())->method('getTransactionReference')
+            ->will($this->returnValue(''));
+        $mockResponse8->expects($this->any())->method('getCardReference')
+            ->will($this->returnValue('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ=='));
+        $request1->fill($mockResponse8);
+        $this->assertSame('another_transaction_reference', $request1->getTransactionReference());
+        $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $request1->getCardReference());
+
+        $request7->fill($mockResponse8, GenericPostRequest::FILL_MODE_TRANSACTION_REFERENCE);
+        $this->assertNull($request7->getTransactionReference());
+        $this->assertNull($request7->getCardReference());
+
+        $request7->fill($mockResponse8, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertNull($request7->getTransactionReference());
+        $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $request7->getCardReference());
+    }
+
+
     public function testGetDataSimple()
     {
         $this->assertSame($this->expectedData, $this->request->getData());

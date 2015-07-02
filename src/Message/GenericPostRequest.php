@@ -15,6 +15,10 @@ use Omnipay\PayUnity\AccountRegistrationReference;
  */
 class GenericPostRequest extends AbstractPostRequest
 {
+    const FILL_MODE_TRANSACTION_REFERENCE   = 1;
+    const FILL_MODE_CARD_REFERENCE          = 2;
+    const FILL_MODE_ALL                     = 3;
+
     /**
      * This is to be redefined in particular PostRequest messages
      *
@@ -35,6 +39,28 @@ class GenericPostRequest extends AbstractPostRequest
         $result = $this->addCardReference($result);
 
         return $result;
+    }
+
+    /**
+     * Set TransactionReference and/or CardReference based on previous transaction response
+     *
+     * @param GenericPostResponse $response Previous transaction response
+     * @param int $fillMode Whether to set TransactionReference, CardReference, or both (default)
+     */
+    public function fill(GenericPostResponse $response, $fillMode = self::FILL_MODE_ALL)
+    {
+        if ($fillMode & self::FILL_MODE_TRANSACTION_REFERENCE) {
+            $transactionReference = $response->getTransactionReference();
+            if ($transactionReference) {
+                $this->setTransactionReference($transactionReference);
+            }
+        }
+        if ($fillMode & self::FILL_MODE_CARD_REFERENCE) {
+            $cardReference = $response->getCardReference();
+            if ($cardReference) {
+                $this->setCardReference($cardReference);
+            }
+        }
     }
 
     /**
