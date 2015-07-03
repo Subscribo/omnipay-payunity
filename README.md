@@ -254,14 +254,22 @@ Post gateway requests provide method `fill()` to make chaining requests easier.
 
 Method `fill()` accepts two arguments:
 * `$response` - and instance of `GenericPostResponse`
-* `$fillMode` - optional, integer (1, 2 or 3), specifying which parameters should be set. Available constants:
+* `$fillMode` - optional, integer, specifying which parameters should be set. Available basic constants:
     * `GenericPostRequests::FILL_MODE_TRANSACTION_REFERENCE`
     * `GenericPostRequests::FILL_MODE_CARD_REFERENCE`
-    * `GenericPostRequests::FILL_MODE_ALL` (default)
+    * `GenericPostRequests::FILL_MODE_AMOUNT`
+    * `GenericPostRequests::FILL_MODE_CURRENCY`
+    * `GenericPostRequests::FILL_MODE_DESCRIPTION`
 
-Depending on `$fillMode`, `cardReference` and/or `transactionReference` parameters are being set on request,
-on which this method has been used, using values from provided `$response` object.
-If the value provided evaluates as empty, the particular parameter is left intact.
+Constants could be combined using bit arithmetic. Available combination constants:
+    * `GenericPostRequests::FILL_MODE_REFERENCES`
+    * `GenericPostRequests::FILL_MODE_PRESENTATION`
+    * `GenericPostRequests::FILL_MODE_ALL` currently alias for `GenericPostRequests::FILL_MODE_REFERENCES_AND_PRESENTATION`
+
+Depending on `$fillMode`, `cardReference`, `transactionReference`, `amount`, `currency` and/or `description` parameters
+are being set on request, on which this method has been used, using values from provided `$response` object.
+If `$fillMode` is set to `true` (default), default fill mode for particular request class is used.
+If the value provided evaluates as empty (or '0.00' for amount), the particular parameter is left intact.
 
 #### Post and CopyAndPayCompletePurchase responses
 

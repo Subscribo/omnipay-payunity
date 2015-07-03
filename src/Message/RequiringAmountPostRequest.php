@@ -12,6 +12,8 @@ use Omnipay\PayUnity\Message\GenericPostRequest;
  */
 class RequiringAmountPostRequest extends GenericPostRequest
 {
+    protected $defaultFillMode = self::FILL_MODE_REFERENCES_AND_PRESENTATION;
+
     public function getData()
     {
         $this->validate('amount', 'currency');

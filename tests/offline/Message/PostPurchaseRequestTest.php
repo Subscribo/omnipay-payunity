@@ -61,4 +61,45 @@ class PostPurchaseRequestTest extends TestCase
         $expected['ACCOUNT.REGISTRATION'] = 'test2';
         $this->assertSame($expected, $this->request->getData());
     }
+
+
+    public function testFill()
+    {
+        $mockBuilder = $this->getMockBuilder('\\Omnipay\\PayUnity\\Message\\GenericPostResponse')
+            ->disableOriginalConstructor();
+
+        $requestA = new PostPurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+
+        $this->assertNull($requestA->getTransactionReference());
+        $this->assertNull($requestA->getCardReference());
+        $this->assertNull($requestA->getAmount());
+        $this->assertNull($requestA->getCurrency());
+        $this->assertNull($requestA->getDescription());
+
+        $mockResponseA = $mockBuilder->getMock();
+        $mockResponseA->expects($this->exactly(2))->method('getTransactionReference')
+            ->will($this->returnValue('a_transaction_reference'));
+        $mockResponseA->expects($this->exactly(2))->method('getCardReference')
+            ->will($this->returnValue('eyJhciI6InRlc3QiLCJwYyI6IkNDLkRCIn0='));
+        $mockResponseA->expects($this->exactly(2))->method('getPresentationAmount')
+            ->will($this->returnValue('5.25'));
+        $mockResponseA->expects($this->exactly(2))->method('getPresentationCurrency')
+            ->will($this->returnValue('EUR'));
+        $mockResponseA->expects($this->exactly(2))->method('getPresentationUsage')
+            ->will($this->returnValue('Test presentation usage'));
+        $requestA->fill($mockResponseA);
+
+        $this->assertSame('a_transaction_reference', $requestA->getTransactionReference());
+        $this->assertSame('eyJhciI6InRlc3QiLCJwYyI6IkNDLkRCIn0=', $requestA->getCardReference());
+        $this->assertSame('5.25', $requestA->getAmount());
+        $this->assertSame('EUR', $requestA->getCurrency());
+        $this->assertSame('Test presentation usage', $requestA->getDescription());
+
+        /* testing that FILL_MODE_REFERENCES_AND_PRESENTATION is default for this request */
+
+        $requestB = new PostPurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
+        $requestB->fill($mockResponseA, GenericPostRequest::FILL_MODE_REFERENCES_AND_PRESENTATION);
+        $this->assertEquals($requestA, $requestB);
+    }
+
 }

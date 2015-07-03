@@ -15,9 +15,19 @@ use Omnipay\PayUnity\AccountRegistrationReference;
  */
 class GenericPostRequest extends AbstractPostRequest
 {
-    const FILL_MODE_TRANSACTION_REFERENCE   = 1;
-    const FILL_MODE_CARD_REFERENCE          = 2;
-    const FILL_MODE_ALL                     = 3;
+    const FILL_MODE_TRANSACTION_REFERENCE       =  1;
+    const FILL_MODE_CARD_REFERENCE              =  2;
+    const FILL_MODE_AMOUNT                      =  4;
+    const FILL_MODE_CURRENCY                    =  8;
+    const FILL_MODE_DESCRIPTION                 = 16;
+    /** TransactionReference and CardReference */
+    const FILL_MODE_REFERENCES                  =  3;
+    /** Amount, Currency and Description  */
+    const FILL_MODE_PRESENTATION                = 28;
+    /** All current options */
+    const FILL_MODE_REFERENCES_AND_PRESENTATION = 31;
+    /** All current (and possibly future) options */
+    const FILL_MODE_ALL                         = self::FILL_MODE_REFERENCES_AND_PRESENTATION;
 
     /**
      * This is to be redefined in particular PostRequest messages
@@ -29,6 +39,8 @@ class GenericPostRequest extends AbstractPostRequest
     protected $defaultPaymentMethod = 'CC';
 
     protected $addCardReferenceMode = 'paymentMethodOnly'; //other values: 'full', null
+
+    protected $defaultFillMode = self::FILL_MODE_REFERENCES;
 
     public function getData()
     {
@@ -45,10 +57,13 @@ class GenericPostRequest extends AbstractPostRequest
      * Set TransactionReference and/or CardReference based on previous transaction response
      *
      * @param GenericPostResponse $response Previous transaction response
-     * @param int $fillMode Whether to set TransactionReference, CardReference, or both (default)
+     * @param int|bool $fillMode Whether to set TransactionReference, CardReference, Amount, Currency and/or Description
      */
-    public function fill(GenericPostResponse $response, $fillMode = self::FILL_MODE_ALL)
+    public function fill(GenericPostResponse $response, $fillMode = true)
     {
+        if (true === $fillMode) {
+            $fillMode = $this->defaultFillMode;
+        }
         if ($fillMode & self::FILL_MODE_TRANSACTION_REFERENCE) {
             $transactionReference = $response->getTransactionReference();
             if ($transactionReference) {
@@ -59,6 +74,27 @@ class GenericPostRequest extends AbstractPostRequest
             $cardReference = $response->getCardReference();
             if ($cardReference) {
                 $this->setCardReference($cardReference);
+            }
+        }
+        if ($fillMode & self::FILL_MODE_AMOUNT) {
+            $amount = $response->getPresentationAmount();
+            if ('0.00' === $amount) {
+                $amount = null;
+            }
+            if ($amount) {
+                $this->setAmount($amount);
+            }
+        }
+        if ($fillMode & self::FILL_MODE_CURRENCY) {
+            $currency = $response->getPresentationCurrency();
+            if ($currency) {
+                $this->setCurrency($currency);
+            }
+        }
+        if ($fillMode & self::FILL_MODE_DESCRIPTION) {
+            $description = $response->getPresentationUsage();
+            if ($description) {
+                $this->setDescription($description);
             }
         }
     }

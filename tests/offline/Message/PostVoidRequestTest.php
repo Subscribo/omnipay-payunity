@@ -45,4 +45,42 @@ class PostVoidRequestTest extends TestCase
         $expected['PAYMENT.CODE'] = 'AA.RV';
         $this->assertSame($expected, $this->request->getData());
     }
+
+
+    public function testFill()
+    {
+        $mockBuilder = $this->getMockBuilder('\\Omnipay\\PayUnity\\Message\\GenericPostResponse')
+            ->disableOriginalConstructor();
+
+        $requestA = new PostVoidRequest($this->getHttpClient(), $this->getHttpRequest());
+
+        $this->assertNull($requestA->getTransactionReference());
+        $this->assertNull($requestA->getCardReference());
+        $this->assertNull($requestA->getAmount());
+        $this->assertNull($requestA->getCurrency());
+        $this->assertNull($requestA->getDescription());
+
+        $mockResponseA = $mockBuilder->getMock();
+        $mockResponseA->expects($this->exactly(2))->method('getTransactionReference')
+            ->will($this->returnValue('a_transaction_reference'));
+        $mockResponseA->expects($this->exactly(2))->method('getCardReference')
+            ->will($this->returnValue('eyJhciI6InRlc3QiLCJwYyI6IkNDLkRCIn0='));
+        $mockResponseA->expects($this->never())->method('getPresentationAmount');
+        $mockResponseA->expects($this->never())->method('getPresentationCurrency');
+        $mockResponseA->expects($this->never())->method('getPresentationUsage');
+
+        $requestA->fill($mockResponseA);
+
+        $this->assertSame('a_transaction_reference', $requestA->getTransactionReference());
+        $this->assertSame('eyJhciI6InRlc3QiLCJwYyI6IkNDLkRCIn0=', $requestA->getCardReference());
+        $this->assertNull($requestA->getAmount());
+        $this->assertNull($requestA->getCurrency());
+        $this->assertNull($requestA->getDescription());
+
+        /* testing that FILL_MODE_REFERENCES is default for this request */
+
+        $requestB = new PostVoidRequest($this->getHttpClient(), $this->getHttpRequest());
+        $requestB->fill($mockResponseA, GenericPostRequest::FILL_MODE_REFERENCES);
+        $this->assertEquals($requestA, $requestB);
+    }
 }
