@@ -83,7 +83,7 @@ class GenericPostRequestTest extends TestCase
             ->will($this->returnValue('EUR'));
         $mockResponseA->expects($this->exactly(2))->method('getPresentationUsage')
             ->will($this->returnValue('Test presentation usage'));
-        $requestA->fill($mockResponseA, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertSame($requestA, $requestA->fill($mockResponseA, GenericPostRequest::FILL_MODE_ALL));
         $this->assertSame('a_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QiLCJwYyI6IkNDLkRCIn0=', $requestA->getCardReference());
         $this->assertSame('5.25', $requestA->getAmount());
@@ -91,7 +91,7 @@ class GenericPostRequestTest extends TestCase
         $this->assertSame('Test presentation usage', $requestA->getDescription());
 
         $requestB = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $requestB->fill($mockResponseA, GenericPostRequest::FILL_MODE_REFERENCES_AND_PRESENTATION);
+        $this->assertSame($requestB, $requestB->fill($mockResponseA, GenericPostRequest::FILL_MODE_REFERENCES_AND_PRESENTATION));
         $this->assertEquals($requestA, $requestB);
 
         /* FILL_MODE_REFERENCES, default */
@@ -111,14 +111,14 @@ class GenericPostRequestTest extends TestCase
         $mockResponse1->expects($this->never())->method('getPresentationAmount');
         $mockResponse1->expects($this->never())->method('getPresentationCurrency');
         $mockResponse1->expects($this->never())->method('getPresentationUsage');
-        $request1->fill($mockResponse1);
+        $this->assertSame($request1, $request1->fill($mockResponse1));
         $this->assertSame('some_transaction_reference', $request1->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9', $request1->getCardReference());
         $this->assertNull($request1->getAmount());
         $this->assertNull($request1->getCurrency());
         $this->assertNull($request1->getDescription());
 
-        $requestB->fill($mockResponse1, GenericPostRequest::FILL_MODE_REFERENCES);
+        $this->assertSame($requestB, $requestB->fill($mockResponse1, GenericPostRequest::FILL_MODE_REFERENCES));
         $this->assertSame('some_transaction_reference', $requestB->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9', $requestB->getCardReference());
         $this->assertSame('5.25', $requestB->getAmount());
@@ -126,7 +126,7 @@ class GenericPostRequestTest extends TestCase
         $this->assertSame('Test presentation usage', $requestB->getDescription());
 
         $requestC = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $requestC->fill($mockResponse1, GenericPostRequest::FILL_MODE_REFERENCES);
+        $this->assertSame($requestC, $requestC->fill($mockResponse1, GenericPostRequest::FILL_MODE_REFERENCES));
         $this->assertEquals($request1, $requestC);
 
         /*  FILL_MODE_ALL, FILL_MODE_REFERENCES_AND_PRESENTATION  */
@@ -143,20 +143,20 @@ class GenericPostRequestTest extends TestCase
         $mockResponse2->expects($this->atLeastOnce())->method('getPresentationUsage')
             ->will($this->returnValue(''));
         $request2 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request2->fill($mockResponse2, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertSame($request2, $request2->fill($mockResponse2, GenericPostRequest::FILL_MODE_ALL));
         $this->assertSame('another_transaction_reference', $request2->getTransactionReference());
         $this->assertNull($request2->getCardReference());
         $this->assertNull($request2->getAmount());
         $this->assertNull($request2->getCurrency());
         $this->assertNull($request2->getDescription());
-        $requestA->fill($mockResponse2, GenericPostRequest::FILL_MODE_REFERENCES_AND_PRESENTATION);
+        $this->assertSame($requestA, $requestA->fill($mockResponse2, GenericPostRequest::FILL_MODE_REFERENCES_AND_PRESENTATION));
         $this->assertSame('another_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QiLCJwYyI6IkNDLkRCIn0=', $requestA->getCardReference());
         $this->assertSame('5.25', $requestA->getAmount());
         $this->assertSame('EUR', $requestA->getCurrency());
         $this->assertSame('Test presentation usage', $requestA->getDescription());
 
-        $request1->fill($mockResponse2);
+        $this->assertSame($request1, $request1->fill($mockResponse2));
         $this->assertSame('another_transaction_reference', $request1->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9', $request1->getCardReference());
         $this->assertNull($request1->getAmount());
@@ -173,7 +173,7 @@ class GenericPostRequestTest extends TestCase
         $mockResponse3->expects($this->never())->method('getPresentationCurrency');
         $mockResponse3->expects($this->never())->method('getPresentationUsage');
         $request3 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request3->fill($mockResponse3, GenericPostRequest::FILL_MODE_TRANSACTION_REFERENCE);
+        $this->assertSame($request3, $request3->fill($mockResponse3, GenericPostRequest::FILL_MODE_TRANSACTION_REFERENCE));
         $this->assertSame('some_transaction_reference', $request3->getTransactionReference());
         $this->assertNull($request3->getCardReference());
         $this->assertNull($request3->getAmount());
@@ -190,7 +190,7 @@ class GenericPostRequestTest extends TestCase
         $mockResponse4->expects($this->never())->method('getPresentationCurrency');
         $mockResponse4->expects($this->never())->method('getPresentationUsage');
         $request4 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request4->fill($mockResponse4, GenericPostRequest::FILL_MODE_CARD_REFERENCE);
+        $this->assertSame($request4, $request4->fill($mockResponse4, GenericPostRequest::FILL_MODE_CARD_REFERENCE));
         $this->assertNull($request4->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9', $request4->getCardReference());
         $this->assertNull($request4->getAmount());
@@ -207,7 +207,7 @@ class GenericPostRequestTest extends TestCase
         $mockResponse5->expects($this->never())->method('getPresentationCurrency');
         $mockResponse5->expects($this->never())->method('getPresentationUsage');
         $request5 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request5->fill($mockResponse5, GenericPostRequest::FILL_MODE_TRANSACTION_REFERENCE);
+        $this->assertSame($request5, $request5->fill($mockResponse5, GenericPostRequest::FILL_MODE_TRANSACTION_REFERENCE));
         $this->assertNull($request5->getTransactionReference());
         $this->assertNull($request5->getCardReference());
         $this->assertNull($request5->getAmount());
@@ -228,20 +228,20 @@ class GenericPostRequestTest extends TestCase
         $mockResponse6->expects($this->exactly(3))->method('getPresentationUsage')
             ->will($this->returnValue(null));
         $request6 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request6->fill($mockResponse6, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertSame($request6, $request6->fill($mockResponse6, GenericPostRequest::FILL_MODE_ALL));
         $this->assertNull($request6->getTransactionReference());
         $this->assertNull($request6->getCardReference());
         $this->assertNull($request6->getAmount());
         $this->assertNull($request6->getCurrency());
         $this->assertNull($request6->getDescription());
-        $requestA->fill($mockResponse6, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertSame($requestA, $requestA->fill($mockResponse6, GenericPostRequest::FILL_MODE_ALL));
         $this->assertSame('another_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QiLCJwYyI6IkNDLkRCIn0=', $requestA->getCardReference());
         $this->assertSame('5.25', $requestA->getAmount());
         $this->assertSame('EUR', $requestA->getCurrency());
         $this->assertSame('Test presentation usage', $requestA->getDescription());
 
-        $request1->fill($mockResponse6, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertSame($request1, $request1->fill($mockResponse6, GenericPostRequest::FILL_MODE_ALL));
         $this->assertSame('another_transaction_reference', $request1->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QyIiwicGMiOiJBQS5CQiJ9', $request1->getCardReference());
         $this->assertNull($request1->getAmount());
@@ -257,7 +257,7 @@ class GenericPostRequestTest extends TestCase
         $mockResponse7->expects($this->never())->method('getPresentationCurrency');
         $mockResponse7->expects($this->never())->method('getPresentationUsage');
         $request7 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request7->fill($mockResponse7, false);
+        $this->assertSame($request7,  $request7->fill($mockResponse7, false));
         $this->assertNull($request7->getTransactionReference());
         $this->assertNull($request7->getCardReference());
         $this->assertNull($request7->getAmount());
@@ -277,35 +277,35 @@ class GenericPostRequestTest extends TestCase
             ->will($this->returnValue('GBP'));
         $mockResponse8->expects($this->atLeastOnce())->method('getPresentationUsage')
             ->will($this->returnValue(''));
-        $request1->fill($mockResponse8);
+        $this->assertSame($request1, $request1->fill($mockResponse8));
         $this->assertSame('another_transaction_reference', $request1->getTransactionReference());
         $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $request1->getCardReference());
         $this->assertNull($request1->getAmount());
         $this->assertNull($request1->getCurrency());
         $this->assertNull($request1->getDescription());
 
-        $request1->fill($mockResponse8, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertSame($request1, $request1->fill($mockResponse8, GenericPostRequest::FILL_MODE_ALL));
         $this->assertSame('another_transaction_reference', $request1->getTransactionReference());
         $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $request1->getCardReference());
         $this->assertNull($request1->getAmount());
         $this->assertSame('GBP', $request1->getCurrency());
         $this->assertNull($request1->getDescription());
 
-        $request7->fill($mockResponse8, GenericPostRequest::FILL_MODE_TRANSACTION_REFERENCE);
+        $this->assertSame($request7, $request7->fill($mockResponse8, GenericPostRequest::FILL_MODE_TRANSACTION_REFERENCE));
         $this->assertNull($request7->getTransactionReference());
         $this->assertNull($request7->getCardReference());
         $this->assertNull($request7->getAmount());
         $this->assertNull($request7->getCurrency());
         $this->assertNull($request7->getDescription());
 
-        $request7->fill($mockResponse8, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertSame($request7, $request7->fill($mockResponse8, GenericPostRequest::FILL_MODE_ALL));
         $this->assertNull($request7->getTransactionReference());
         $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $request7->getCardReference());
         $this->assertNull($request7->getAmount());
         $this->assertSame('GBP', $request7->getCurrency());
         $this->assertNull($request7->getDescription());
 
-        $requestA->fill($mockResponse8, GenericPostRequest::FILL_MODE_ALL);
+        $this->assertSame($requestA, $requestA->fill($mockResponse8, GenericPostRequest::FILL_MODE_ALL));
         $this->assertSame('another_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $requestA->getCardReference());
         $this->assertSame('5.25', $requestA->getAmount());
@@ -322,14 +322,14 @@ class GenericPostRequestTest extends TestCase
         $mockResponse9->expects($this->never())->method('getPresentationCurrency');
         $mockResponse9->expects($this->never())->method('getPresentationUsage');
         $request9 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request9->fill($mockResponse9, GenericPostRequest::FILL_MODE_AMOUNT);
+        $this->assertSame($request9, $request9->fill($mockResponse9, GenericPostRequest::FILL_MODE_AMOUNT));
         $this->assertNull($request9->getTransactionReference());
         $this->assertNull($request9->getCardReference());
         $this->assertSame('8.15', $request9->getAmount());
         $this->assertNull($request9->getCurrency());
         $this->assertNull($request9->getDescription());
 
-        $requestA->fill($mockResponse9, GenericPostRequest::FILL_MODE_AMOUNT);
+        $this->assertSame($requestA, $requestA->fill($mockResponse9, GenericPostRequest::FILL_MODE_AMOUNT));
         $this->assertSame('another_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $requestA->getCardReference());
         $this->assertSame('8.15', $requestA->getAmount());
@@ -346,14 +346,14 @@ class GenericPostRequestTest extends TestCase
             ->will($this->returnValue('USD'));
         $mockResponse10->expects($this->never())->method('getPresentationUsage');
         $request10 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request10->fill($mockResponse10, GenericPostRequest::FILL_MODE_CURRENCY);
+        $this->assertSame($request10, $request10->fill($mockResponse10, GenericPostRequest::FILL_MODE_CURRENCY));
         $this->assertNull($request10->getTransactionReference());
         $this->assertNull($request10->getCardReference());
         $this->assertNull($request10->getAmount());
         $this->assertSame('USD', $request10->getCurrency());
         $this->assertNull($request10->getDescription());
 
-        $requestA->fill($mockResponse10, GenericPostRequest::FILL_MODE_CURRENCY);
+        $this->assertSame($requestA, $requestA->fill($mockResponse10, GenericPostRequest::FILL_MODE_CURRENCY));
         $this->assertSame('another_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $requestA->getCardReference());
         $this->assertSame('8.15', $requestA->getAmount());
@@ -371,14 +371,14 @@ class GenericPostRequestTest extends TestCase
             ->will($this->returnValue('Another usage'));
 
         $request11 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request11->fill($mockResponse11, GenericPostRequest::FILL_MODE_DESCRIPTION);
+        $this->assertSame($request11, $request11->fill($mockResponse11, GenericPostRequest::FILL_MODE_DESCRIPTION));
         $this->assertNull($request11->getTransactionReference());
         $this->assertNull($request11->getCardReference());
         $this->assertNull($request11->getAmount());
         $this->assertNull($request11->getCurrency());
         $this->assertSame('Another usage', $request11->getDescription());
 
-        $requestA->fill($mockResponse11, GenericPostRequest::FILL_MODE_DESCRIPTION);
+        $this->assertSame($requestA, $requestA->fill($mockResponse11, GenericPostRequest::FILL_MODE_DESCRIPTION));
         $this->assertSame('another_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $requestA->getCardReference());
         $this->assertSame('8.15', $requestA->getAmount());
@@ -398,14 +398,14 @@ class GenericPostRequestTest extends TestCase
             ->will($this->returnValue('Different usage'));
 
         $request12 = new GenericPostRequest($this->getHttpClient(), $this->getHttpRequest());
-        $request12->fill($mockResponse12, GenericPostRequest::FILL_MODE_PRESENTATION);
+        $this->assertSame($request12, $request12->fill($mockResponse12, GenericPostRequest::FILL_MODE_PRESENTATION));
         $this->assertNull($request12->getTransactionReference());
         $this->assertNull($request12->getCardReference());
         $this->assertSame('3.48', $request12->getAmount());
         $this->assertSame('NOK', $request12->getCurrency());
         $this->assertSame('Different usage', $request12->getDescription());
 
-        $requestA->fill($mockResponse12, GenericPostRequest::FILL_MODE_PRESENTATION);
+        $this->assertSame($requestA, $requestA->fill($mockResponse12, GenericPostRequest::FILL_MODE_PRESENTATION));
         $this->assertSame('another_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6ImRpZmZlcmVudCIsInBjIjoiREQuREIifQ==', $requestA->getCardReference());
         $this->assertSame('3.48', $requestA->getAmount());

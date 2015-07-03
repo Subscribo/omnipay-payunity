@@ -58,6 +58,7 @@ class GenericPostRequest extends AbstractPostRequest
      *
      * @param GenericPostResponse $response Previous transaction response
      * @param int|bool $fillMode Whether to set TransactionReference, CardReference, Amount, Currency and/or Description
+     * @return $this
      */
     public function fill(GenericPostResponse $response, $fillMode = true)
     {
@@ -97,6 +98,7 @@ class GenericPostRequest extends AbstractPostRequest
                 $this->setDescription($description);
             }
         }
+        return $this;
     }
 
     /**

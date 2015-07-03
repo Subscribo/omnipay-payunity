@@ -262,18 +262,13 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $refundRequest1 = $this->gateway->refund();
         $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\PostRefundRequest', $refundRequest1);
         /** @var \Omnipay\PayUnity\Message\PostRefundRequest $refundRequest1  */
-        $refundRequest1->setTransactionReference($transactionReference);
-        $refundRequest1->setCardReference($this->accountRegistrationReference);
-        $refundRequest1->setAmount('0.40');
-        $refundRequest1->setCurrency('EUR');
-        $refund1TransactionId = 'TEST_REFUND_1_'.uniqid();
-        $refund1InvoiceId = 'Test refund invoice ID'.uniqid();
-        $usage1 = 'SomeRefund'.uniqid();
-        $refundRequest1->setTransactionId($refund1TransactionId);
-        $refundRequest1->setPaymentMemo('Test refunding');
-        $refundRequest1->setIdentificationBulkId('Test refund Bulk ID 123');
-        $refundRequest1->setIdentificationInvoiceId($refund1InvoiceId);
-        $refundRequest1->setPresentationUsage($usage1);
+        $this->assertSame($refundRequest1, $refundRequest1->fill($purchaseResponse));
+        $this->assertSame($refundRequest1, $refundRequest1->setAmount('0.40'));
+        $this->assertSame($refundRequest1, $refundRequest1->setIdentificationShopperId(null));
+        $this->assertNull($refundRequest1->getTransactionId());
+        $this->assertNull($refundRequest1->getIdentificationTransactionId());
+        $this->assertNull($refundRequest1->getIdentificationShopperId());
+        $this->assertNotContains('Test shopper', $refundRequest1->getData());
 
         $refundResponse1 = $refundRequest1->send();
         $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostResponse', $refundResponse1);
@@ -293,13 +288,14 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame('90', $refundResponse1->getCode());
         $this->assertSame("Successful Processing : Request successfully processed in 'Merchant in Integrator Test Mode'", $refundResponse1->getMessage());
 
-        $this->assertSame($refund1TransactionId, $refundResponse1->getTransactionId());
-        $this->assertSame($refund1TransactionId, $refundResponse1->getIdentificationTransactionId());
+        $this->assertNotEmpty($transactionId);
+        $this->assertSame($transactionId, $refundResponse1->getTransactionId());
+        $this->assertSame($transactionId, $refundResponse1->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $refundResponse1->getIdentificationShopperId());
         $this->assertNotEmpty($refundResponse1->getIdentificationShortId());
         $this->assertSame('0.40', $refundResponse1->getPresentationAmount());
         $this->assertSame('EUR', $refundResponse1->getPresentationCurrency());
-        $this->assertSame($usage1, $refundResponse1->getPresentationUsage());
+        $this->assertSame($usage, $refundResponse1->getPresentationUsage());
 
         $this->assertSame('SYNC', $refundResponse1->getTransactionResponse());
         $this->assertSame('00', $refundResponse1->getProcessingReasonCode());

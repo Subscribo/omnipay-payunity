@@ -87,7 +87,8 @@ class PostPurchaseRequestTest extends TestCase
             ->will($this->returnValue('EUR'));
         $mockResponseA->expects($this->exactly(2))->method('getPresentationUsage')
             ->will($this->returnValue('Test presentation usage'));
-        $requestA->fill($mockResponseA);
+
+        $this->assertSame($requestA, $requestA->fill($mockResponseA));
 
         $this->assertSame('a_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QiLCJwYyI6IkNDLkRCIn0=', $requestA->getCardReference());
@@ -98,7 +99,7 @@ class PostPurchaseRequestTest extends TestCase
         /* testing that FILL_MODE_REFERENCES_AND_PRESENTATION is default for this request */
 
         $requestB = new PostPurchaseRequest($this->getHttpClient(), $this->getHttpRequest());
-        $requestB->fill($mockResponseA, GenericPostRequest::FILL_MODE_REFERENCES_AND_PRESENTATION);
+        $this->assertSame($requestB, $requestB->fill($mockResponseA, GenericPostRequest::FILL_MODE_REFERENCES_AND_PRESENTATION));
         $this->assertEquals($requestA, $requestB);
     }
 

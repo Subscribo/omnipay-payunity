@@ -69,7 +69,7 @@ class PostVoidRequestTest extends TestCase
         $mockResponseA->expects($this->never())->method('getPresentationCurrency');
         $mockResponseA->expects($this->never())->method('getPresentationUsage');
 
-        $requestA->fill($mockResponseA);
+        $this->assertSame($requestA, $requestA->fill($mockResponseA));
 
         $this->assertSame('a_transaction_reference', $requestA->getTransactionReference());
         $this->assertSame('eyJhciI6InRlc3QiLCJwYyI6IkNDLkRCIn0=', $requestA->getCardReference());
@@ -80,7 +80,7 @@ class PostVoidRequestTest extends TestCase
         /* testing that FILL_MODE_REFERENCES is default for this request */
 
         $requestB = new PostVoidRequest($this->getHttpClient(), $this->getHttpRequest());
-        $requestB->fill($mockResponseA, GenericPostRequest::FILL_MODE_REFERENCES);
+        $this->assertSame($requestB, $requestB->fill($mockResponseA, GenericPostRequest::FILL_MODE_REFERENCES));
         $this->assertEquals($requestA, $requestB);
     }
 }
