@@ -39,10 +39,12 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $request->setAmount('2.50');
         $request->setCurrency('EUR');
         $request->setCardReference($this->accountRegistrationReference);
+        $description = 'SomePurchase'.uniqid();
         $transactionId = 'TEST_PURCHASE_'.uniqid();
         $invoiceId = 'Test purchase invoice ID'.uniqid();
         $request->setTransactionId($transactionId);
         $request->setPaymentMemo('Test payment using token');
+        $request->setDescription($description);
         $request->setIdentificationBulkId('Test purchase Bulk ID 123');
         $request->setIdentificationInvoiceId($invoiceId);
         $response = $request->send();
@@ -65,6 +67,11 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame($transactionId, $response->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $response->getIdentificationShopperId());
         $this->assertNotEmpty($response->getIdentificationShortId());
+        $this->assertSame('2.50', $response->getPresentationAmount());
+        $this->assertSame('EUR', $response->getPresentationCurrency());
+        $this->assertSame($description, $response->getPresentationUsage());
+
+        $this->assertSame('SYNC', $response->getTransactionResponse());
         $this->assertSame('00', $response->getProcessingReasonCode());
         $this->assertSame('CC.DB.90.00', $response->getProcessingCode());
         $this->assertSame('Successful Processing', $response->getProcessingReason());
@@ -120,6 +127,10 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame($transactionId, $response->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $response->getIdentificationShopperId());
         $this->assertNotEmpty($response->getIdentificationShortId());
+        $this->assertSame('0.00', $response->getPresentationAmount());
+        $this->assertNull($response->getPresentationCurrency());
+
+        $this->assertSame('SYNC', $response->getTransactionResponse());
         $this->assertSame('00', $response->getProcessingReasonCode());
         $this->assertSame('CC.RV.90.00', $response->getProcessingCode());
         $this->assertSame('Successful Processing', $response->getProcessingReason());
@@ -150,6 +161,7 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $request->setPaymentMemo('Test voiding');
         $request->setIdentificationBulkId('Test void Bulk ID 123');
         $request->setIdentificationInvoiceId($invoiceId);
+        $request->setDescription('TestVoidFailure');
         $response = $request->send();
         $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostResponse', $response);
         /** @var  \Omnipay\PayUnity\Message\GenericPostResponse $response */
@@ -172,6 +184,11 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame($transactionId, $response->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $response->getIdentificationShopperId());
         $this->assertNotEmpty($response->getIdentificationShortId());
+        $this->assertSame('0.00', $response->getPresentationAmount());
+        $this->assertNull($response->getPresentationCurrency());
+        $this->assertSame('TestVoidFailure', $response->getPresentationUsage());
+
+        $this->assertSame('SYNC', $response->getTransactionResponse());
         $this->assertSame('30', $response->getProcessingReasonCode());
         $this->assertSame('CC.RV.70.30', $response->getProcessingCode());
         $this->assertSame('Reference Error', $response->getProcessingReason());
@@ -199,10 +216,12 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $purchaseRequest->setCardReference($this->accountRegistrationReference);
         $transactionId = 'TEST_PURCHASE_'.uniqid();
         $invoiceId = 'Test purchase invoice ID'.uniqid();
+        $usage = 'SomePurchase'.uniqid();
         $purchaseRequest->setTransactionId($transactionId);
         $purchaseRequest->setPaymentMemo('Test payment using token');
         $purchaseRequest->setIdentificationBulkId('Test purchase Bulk ID 123');
         $purchaseRequest->setIdentificationInvoiceId($invoiceId);
+        $purchaseRequest->setPresentationUsage($usage);
         $purchaseResponse = $purchaseRequest->send();
         $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostResponse', $purchaseResponse);
         /** @var  \Omnipay\PayUnity\Message\GenericPostResponse $purchaseResponse */
@@ -223,6 +242,11 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame($transactionId, $purchaseResponse->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $purchaseResponse->getIdentificationShopperId());
         $this->assertNotEmpty($purchaseResponse->getIdentificationShortId());
+        $this->assertSame('1.10', $purchaseResponse->getPresentationAmount());
+        $this->assertSame('EUR', $purchaseResponse->getPresentationCurrency());
+        $this->assertSame($usage, $purchaseResponse->getPresentationUsage());
+
+        $this->assertSame('SYNC', $purchaseResponse->getTransactionResponse());
         $this->assertSame('00', $purchaseResponse->getProcessingReasonCode());
         $this->assertSame('CC.DB.90.00', $purchaseResponse->getProcessingCode());
         $this->assertSame('Successful Processing', $purchaseResponse->getProcessingReason());
@@ -244,10 +268,13 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $refundRequest1->setCurrency('EUR');
         $refund1TransactionId = 'TEST_REFUND_1_'.uniqid();
         $refund1InvoiceId = 'Test refund invoice ID'.uniqid();
+        $usage1 = 'SomeRefund'.uniqid();
         $refundRequest1->setTransactionId($refund1TransactionId);
         $refundRequest1->setPaymentMemo('Test refunding');
         $refundRequest1->setIdentificationBulkId('Test refund Bulk ID 123');
         $refundRequest1->setIdentificationInvoiceId($refund1InvoiceId);
+        $refundRequest1->setPresentationUsage($usage1);
+
         $refundResponse1 = $refundRequest1->send();
         $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostResponse', $refundResponse1);
         /** @var  \Omnipay\PayUnity\Message\GenericPostResponse $refundResponse1 */
@@ -270,6 +297,11 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame($refund1TransactionId, $refundResponse1->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $refundResponse1->getIdentificationShopperId());
         $this->assertNotEmpty($refundResponse1->getIdentificationShortId());
+        $this->assertSame('0.40', $refundResponse1->getPresentationAmount());
+        $this->assertSame('EUR', $refundResponse1->getPresentationCurrency());
+        $this->assertSame($usage1, $refundResponse1->getPresentationUsage());
+
+        $this->assertSame('SYNC', $refundResponse1->getTransactionResponse());
         $this->assertSame('00', $refundResponse1->getProcessingReasonCode());
         $this->assertSame('CC.RF.90.00', $refundResponse1->getProcessingCode());
         $this->assertSame('Successful Processing', $refundResponse1->getProcessingReason());
@@ -293,6 +325,7 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $refundRequest2->setPaymentMemo('Test refunding');
         $refundRequest2->setIdentificationBulkId('Test refund Bulk ID 123');
         $refundRequest2->setIdentificationInvoiceId($refund2InvoiceId);
+
         $refundResponse2 = $refundRequest2->send();
         $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostResponse', $refundResponse2);
         /** @var  \Omnipay\PayUnity\Message\GenericPostResponse $refundResponse2 */
@@ -315,6 +348,11 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame($refund2TransactionId, $refundResponse2->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $refundResponse2->getIdentificationShopperId());
         $this->assertNotEmpty($refundResponse2->getIdentificationShortId());
+        $this->assertSame('0.50', $refundResponse2->getPresentationAmount());
+        $this->assertSame('EUR', $refundResponse2->getPresentationCurrency());
+        $this->assertNull($refundResponse2->getPresentationUsage());
+
+        $this->assertSame('SYNC', $refundResponse2->getTransactionResponse());
         $this->assertSame('00', $refundResponse2->getProcessingReasonCode());
         $this->assertSame('CC.RF.90.00', $refundResponse2->getProcessingCode());
         $this->assertSame('Successful Processing', $refundResponse2->getProcessingReason());
@@ -344,10 +382,13 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $refundRequest3->setCurrency('EUR');
         $transactionId = 'TEST_REFUND_3_'.uniqid();
         $invoiceId = 'Test refund invoice ID'.uniqid();
+        $usage3 = 'SomeRefundFailure'.uniqid();
         $refundRequest3->setTransactionId($transactionId);
         $refundRequest3->setPaymentMemo('Test refunding');
         $refundRequest3->setIdentificationBulkId('Test refund Bulk ID 123');
         $refundRequest3->setIdentificationInvoiceId($invoiceId);
+        $refundRequest3->setPresentationUsage($usage3);
+
         $refundResponse3 = $refundRequest3->send();
         $this->assertInstanceOf('\\Omnipay\\PayUnity\\Message\\GenericPostResponse', $refundResponse3);
         /** @var  \Omnipay\PayUnity\Message\GenericPostResponse $refundResponse3 */
@@ -370,6 +411,11 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame($transactionId, $refundResponse3->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $refundResponse3->getIdentificationShopperId());
         $this->assertNotEmpty($refundResponse3->getIdentificationShortId());
+        $this->assertSame('0.30', $refundResponse3->getPresentationAmount());
+        $this->assertSame('EUR', $refundResponse3->getPresentationCurrency());
+        $this->assertSame($usage3, $refundResponse3->getPresentationUsage());
+
+        $this->assertSame('SYNC', $refundResponse3->getTransactionResponse());
         $this->assertSame('30', $refundResponse3->getProcessingReasonCode());
         $this->assertSame('CC.RF.70.30', $refundResponse3->getProcessingCode());
         $this->assertSame('Reference Error', $refundResponse3->getProcessingReason());
@@ -397,10 +443,13 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $request->setCardReference($this->accountRegistrationReference);
         $transactionId = 'TEST_AUTHORIZE_'.uniqid();
         $invoiceId = 'Test authorize invoice ID'.uniqid();
+        $usage = 'SomeAuthorize'.uniqid();
         $request->setTransactionId($transactionId);
         $request->setPaymentMemo('Test authorization using token');
         $request->setIdentificationBulkId('Test authorize Bulk ID 123');
         $request->setIdentificationInvoiceId($invoiceId);
+        $request->setPresentationUsage($usage);
+
         $response = $request->send();
 
         $this->checkSuccessfulResponse($response, $request);
@@ -441,10 +490,13 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $request->setCurrency('EUR');
         $transactionId = 'TEST_CAPTURE_FAILURE_'.uniqid();
         $invoiceId = 'Test capture failure invoice ID'.uniqid();
+        $usage = 'SomeCaptureFailure'.uniqid();
         $request->setTransactionId($transactionId);
         $request->setPaymentMemo('Test capturing');
         $request->setIdentificationBulkId('Test capture Bulk ID 123');
         $request->setIdentificationInvoiceId($invoiceId);
+        $request->setPresentationUsage($usage);
+
         $response = $request->send();
 
         $this->checkGenericPostResponse($response, $request);
@@ -479,10 +531,13 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $request->setCurrency('EUR');
         $transactionId = 'TEST_CAPTURE_'.uniqid();
         $invoiceId = 'Test capture invoice ID'.uniqid();
+        $usage = 'SomeCapture'.uniqid();
         $request->setTransactionId($transactionId);
         $request->setPaymentMemo('Test capturing');
         $request->setIdentificationBulkId('Test capture Bulk ID 123');
         $request->setIdentificationInvoiceId($invoiceId);
+        $request->setPresentationUsage($usage);
+
         $response = $request->send();
 
         $this->checkSuccessfulResponse($response, $request);
@@ -532,6 +587,12 @@ class PostGatewayOnlineTest extends GatewayTestCase
         $this->assertSame($response->getTransactionId(), $response->getIdentificationTransactionId());
         $this->assertSame('Test shopper', $response->getIdentificationShopperId());
         $this->assertNotEmpty($response->getIdentificationShortId());
+        $expectedAmount = $request->getAmount() ?: '0.00';
+        $this->assertSame($expectedAmount, $response->getPresentationAmount());
+        $this->assertSame($request->getCurrency(), $response->getPresentationCurrency());
+        $this->assertSame($request->getDescription(), $response->getPresentationUsage());
+
+        $this->assertSame('SYNC', $response->getTransactionResponse());
         $this->assertSame('ACK', $response->getPostValidationErrorCode());
     }
 }

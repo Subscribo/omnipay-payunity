@@ -272,6 +272,9 @@ Post gateway responses as well as `CopyAndPayCompletePurchase` response have als
 * `getAccountRegistration()`
 * `getIdentificationShortId()`
 * `getIdentificationShopperId()`
+* `getPresentationAmount()`
+* `getPresentationCurrency()`
+* `getPresentationUsage()`
 * `getProcessingReason()`
 * `getProcessingReturn()`
 * `getProcessingResult()`
@@ -280,6 +283,7 @@ Post gateway responses as well as `CopyAndPayCompletePurchase` response have als
 * `getProcessingReturnCode()`
 * `getProcessingStatusCode()`
 * `getProcessingPaymentCode()`
+* `getTransactionResponse()`
 * `getPostValidationErrorCode()`
 
 Method `getCode()` tries to get 'PROCESSING.STATUS.CODE', either directly or by parsing 'PROCESSING.CODE',
@@ -289,6 +293,10 @@ Method `getMessage()` tries to concatenate (with colon and spaces if both are pr
 
 Method `getCardReference()` returns tokens, which could be used for subsequent requests, via specifying `cardReference` option on purchase request.
 These tokens are base64-encoded json, containing data from 'ACCOUNT.REGISTRATION' and 'PAYMENT.CODE'
+
+Method `getPresentationAmount()` might return '0.00' instead of an empty / not specified value.
+
+Methods `getPresentationAmount()`, `getPresentationCurrency()`,  `getPresentationUsage()` usually returns null for `CopyAndPayCompletePurchase`.
 
 ### Example code
 

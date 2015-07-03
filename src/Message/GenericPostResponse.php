@@ -14,7 +14,11 @@ class GenericPostResponse extends AbstractResponse
 {
     public function isSuccessful()
     {
-        return (($this->getHttpResponseStatusCode() === 200) and ($this->getProcessingResult() === 'ACK'));
+        return (
+            ($this->getHttpResponseStatusCode() === 200)
+            and ($this->getProcessingResult() === 'ACK')
+            and ($this->getTransactionResponse() === 'SYNC')
+        );
     }
 
 
@@ -57,6 +61,14 @@ class GenericPostResponse extends AbstractResponse
     /**
      * @return string|null
      */
+    public function getTransactionResponse()
+    {
+        return $this->getTransactionData('transaction.response');
+    }
+
+    /**
+     * @return string|null
+     */
     public function getAccountRegistration()
     {
         return $this->getTransactionData('account.registration');
@@ -92,6 +104,30 @@ class GenericPostResponse extends AbstractResponse
     public function getIdentificationShopperId()
     {
         return $this->getTransactionData('identification.shopperid');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPresentationAmount()
+    {
+        return $this->getTransactionData('presentation.amount');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPresentationCurrency()
+    {
+        return $this->getTransactionData('presentation.currency');
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPresentationUsage()
+    {
+        return $this->getTransactionData('presentation.usage');
     }
 
     /**

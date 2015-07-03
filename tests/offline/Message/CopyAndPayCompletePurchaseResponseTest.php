@@ -109,6 +109,10 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertSame('00', $response->getProcessingReasonCode());
         $this->assertSame('CC.DB', $response->getPaymentCode());
         $this->assertNull($response->getPostValidationErrorCode());
+        $this->assertSame('SYNC', $response->getTransactionResponse());
+        $this->assertNull($response->getPresentationAmount());
+        $this->assertNull($response->getPresentationCurrency());
+        $this->assertNull($response->getPresentationUsage());;
     }
 
 
@@ -211,6 +215,10 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertSame('00', $response->getProcessingReasonCode());
         $this->assertSame('CC.DB', $response->getPaymentCode());
         $this->assertNull($response->getPostValidationErrorCode());
+        $this->assertSame('SYNC', $response->getTransactionResponse());
+        $this->assertNull($response->getPresentationAmount());
+        $this->assertNull($response->getPresentationCurrency());
+        $this->assertNull($response->getPresentationUsage());;
     }
 
 
@@ -282,6 +290,10 @@ class CopyAndPayCompletePurchaseResponseTest extends TestCase
         $this->assertSame('100.100.700', $response->getProcessingReturnCode());
         $this->assertSame('CC.DB', $response->getPaymentCode());
         $this->assertNull($response->getPostValidationErrorCode());
+        $this->assertSame('SYNC', $response->getTransactionResponse());
+        $this->assertNull($response->getPresentationAmount());
+        $this->assertNull($response->getPresentationCurrency());
+        $this->assertNull($response->getPresentationUsage());;
     }
 
 

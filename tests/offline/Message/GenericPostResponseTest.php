@@ -71,6 +71,9 @@ class GenericPostResponseTest extends TestCase
         $this->assertSame('some identification unique ID', $response->getIdentificationUniqueId());
         $this->assertSame('some identification transaction ID', $response->getTransactionId());
         $this->assertSame('some identification transaction ID', $response->getIdentificationTransactionId());
+        $this->assertSame('0.00', $response->getPresentationAmount());
+        $this->assertNull($response->getPresentationCurrency());
+        $this->assertNull($response->getPresentationUsage());
         $this->assertNull($response->getAccountRegistration());
         $this->assertSame('some identification short ID', $response->getIdentificationShortId());
         $this->assertSame('Test shopper', $response->getIdentificationShopperId());
@@ -83,6 +86,7 @@ class GenericPostResponseTest extends TestCase
         $this->assertSame('90', $response->acquireProcessingStatusCode());
         $this->assertSame('000.100.110', $response->getProcessingReturnCode());
         $this->assertSame('CC.RV', $response->getPaymentCode());
+        $this->assertSame('SYNC', $response->getTransactionResponse());
         $this->assertSame('ACK', $response->getPostValidationErrorCode());
     }
     
@@ -136,6 +140,10 @@ class GenericPostResponseTest extends TestCase
         $this->assertSame('some identification unique ID', $response->getIdentificationUniqueId());
         $this->assertNull($response->getTransactionId());
         $this->assertNull($response->getIdentificationTransactionId());
+        $this->assertSame('1.05', $response->getPresentationAmount());
+        $this->assertSame('EUR', $response->getPresentationCurrency());
+        $this->assertNull($response->getPresentationUsage());
+
         $this->assertNull($response->getAccountRegistration());
         $this->assertSame('some identification short ID', $response->getIdentificationShortId());
         $this->assertNull($response->getIdentificationShopperId());
@@ -148,6 +156,7 @@ class GenericPostResponseTest extends TestCase
         $this->assertSame('70', $response->acquireProcessingStatusCode());
         $this->assertSame('100.100.100', $response->getProcessingReturnCode());
         $this->assertSame('CC.DB', $response->getPaymentCode());
+        $this->assertSame('SYNC', $response->getTransactionResponse());
         $this->assertSame('ACK', $response->getPostValidationErrorCode());
     }
     
@@ -169,6 +178,7 @@ class GenericPostResponseTest extends TestCase
                     'CLEARING_AMOUNT' => '1.10',
                     'PROCESSING_RESULT' => 'ACK',
                     'NAME_SALUTATION' => 'NONE',
+                    'PRESENTATION_USAGE' => 'Test purchase',
                     'IDENTIFICATION_INVOICEID' => 'Some invoice ID',
                     'POST_VALIDATION' => 'ACK',
                     'CLEARING_CURRENCY' => 'EUR',
@@ -216,6 +226,10 @@ class GenericPostResponseTest extends TestCase
         $this->assertSame('someaccountregistration', $response->getAccountRegistration());
         $this->assertSame('some identification short ID', $response->getIdentificationShortId());
         $this->assertSame('Test shopper', $response->getIdentificationShopperId());
+        $this->assertSame('1.10', $response->getPresentationAmount());
+        $this->assertSame('EUR', $response->getPresentationCurrency());
+        $this->assertSame('Test purchase', $response->getPresentationUsage());
+
         $this->assertSame('Successful Processing', $response->getProcessingReason());
         $this->assertSame("Request successfully processed in 'Merchant in Integrator Test Mode'", $response->getProcessingReturn());
         $this->assertSame('ACK', $response->getProcessingResult());
@@ -225,6 +239,7 @@ class GenericPostResponseTest extends TestCase
         $this->assertSame('90', $response->acquireProcessingStatusCode());
         $this->assertSame('000.100.110', $response->getProcessingReturnCode());
         $this->assertSame('CC.DB', $response->getPaymentCode());
+        $this->assertSame('SYNC', $response->getTransactionResponse());
         $this->assertSame('ACK', $response->getPostValidationErrorCode());
     }
 
@@ -279,6 +294,7 @@ class GenericPostResponseTest extends TestCase
         $this->assertNull($response->acquireProcessingStatusCode());
         $this->assertNull($response->getProcessingReturnCode());
         $this->assertNull($response->getPaymentCode());
+        $this->assertNull($response->getTransactionResponse());
         $this->assertSame('2020', $response->getPostValidationErrorCode());
     }
 }

@@ -33,6 +33,14 @@ class GenericCopyAndPayResponse extends GenericPostResponse
     /**
      * @return string|null
      */
+    public function getTransactionResponse()
+    {
+        return $this->getTransactionData('response');
+    }
+
+    /**
+     * @return string|null
+     */
     public function getProcessingReturn()
     {
         return $this->getTransactionData('processing.return.message');
