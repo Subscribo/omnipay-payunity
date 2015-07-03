@@ -27,6 +27,7 @@ try {
     $request = $gateway->refund();
     $request->setAmount($amount);
     $request->setCurrency('EUR');
+    $request->setDescription('Test partial refund');
     $request->setCardReference($cardReference);
     $request->setTransactionReference($transactionReference);
 

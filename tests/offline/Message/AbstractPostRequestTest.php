@@ -66,6 +66,7 @@ class AbstractPostRequestTest extends TestCase
         $this->assertNull($request->getCurrency());
         $this->assertNull($request->getCardReference());
         $this->assertNull($request->getCard());
+        $this->assertNull($request->getDescription());
 
         $this->assertSame($request, $request->setTransactionId('Some transaction ID'));
         $this->assertSame('Some transaction ID', $request->getTransactionId());
@@ -86,6 +87,10 @@ class AbstractPostRequestTest extends TestCase
 
         $this->assertSame($request, $request->setPresentationUsage('some usage'));
         $this->assertSame('some usage', $request->getPresentationUsage());
+        $this->assertSame('some usage', $request->getDescription());
+        $this->assertSame($request, $request->setDescription('some description'));
+        $this->assertSame('some description', $request->getDescription());
+        $this->assertSame('some description', $request->getPresentationUsage());
 
         $this->assertSame($request, $request->setPaymentType('AA'));
         $this->assertSame('AA', $request->getPaymentType());
@@ -103,6 +108,7 @@ class AbstractPostRequestTest extends TestCase
         $this->assertSame($request, $request->setPaymentType(null));
         $this->assertSame($request, $request->setPaymentMethod(null));
         $this->assertSame($request, $request->setPaymentMemo(null));
+        $this->assertSame($request, $request->setDescription(null));
 
         $this->assertNull($request->getTransactionId());
         $this->assertNull($request->getTransactionReference());
@@ -113,6 +119,7 @@ class AbstractPostRequestTest extends TestCase
         $this->assertNull($request->getPaymentType());
         $this->assertNull($request->getPaymentMethod());
         $this->assertNull($request->getCardReference());
+        $this->assertNull($request->getDescription());
     }
 
 

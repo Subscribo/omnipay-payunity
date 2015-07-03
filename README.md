@@ -103,7 +103,7 @@ Additionally these keys could be specified:
 * `brands`
 * `returnUrl`
 * `transactionId`
-* `presentationUsage`
+* `description` alias for `presentationUsage`
 * `paymentMemo`
 
 Option `brands` could be an array or string with space separated list of (uppercase) brand identifiers, supported by COPYandPAY widget.
@@ -230,7 +230,7 @@ have these parameters (and corresponding setter getter methods):
 * [Parameters inherited from Post gateway](#basic-usage)
 * `transactionId` alias for `identificationTransactionId`
 * `transactionReference` alias for `identificationReferenceId`
-* `presentationUsage`
+* `description` alias for `presentationUsage`
 * `paymentMemo`
 * `paymentCode`
 * `paymentType`

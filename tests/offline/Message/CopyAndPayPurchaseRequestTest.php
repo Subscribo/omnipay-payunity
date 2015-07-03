@@ -22,7 +22,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->extendedOptions = $this->options;
         $this->extendedOptions['clientIp'] = '192.0.2.1';
         $this->extendedOptions['brands'] = 'VISA MAESTRO MASTER';
-        $this->extendedOptions['presentationUsage'] = 'Just for testing';
+        $this->extendedOptions['description'] = 'Just for testing';
         $this->extendedOptions['paymentMemo'] = 'Some memo';
         $this->extendedOptions['paymentType'] = 'RB';
         $this->extendedOptions['transactionMode'] = 'CONNECTOR_TEST';
@@ -160,6 +160,7 @@ class CopyAndPayPurchaseRequestTest extends TestCase
         $this->assertSame('Bulk:SomeTag', $data['IDENTIFICATION.BULKID']);
         $this->assertSame('12345678abcdefgh12345678abcdefgh', $data['IDENTIFICATION.REFERENCEID']);
         $this->assertSame('1.0', $data['REQUEST.VERSION']);
+        $this->assertSame('Just for testing', $data['PRESENTATION.USAGE']);
 
         $this->assertArrayNotHasKey('NAME.SALUTATION', $data);
         $this->assertArrayNotHasKey('NAME.TITLE', $data);

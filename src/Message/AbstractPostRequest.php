@@ -56,6 +56,23 @@ abstract class AbstractPostRequest extends AbstractRequest
     /**
      * @return string|null
      */
+    public function getDescription()
+    {
+        return $this->getPresentationUsage();
+    }
+
+    /**
+     * @param string|null $value
+     * @return $this
+     */
+    public function setDescription($value)
+    {
+        return $this->setPresentationUsage($value);
+    }
+
+    /**
+     * @return string|null
+     */
     public function getIdentificationTransactionId()
     {
         return $this->getParameter('identificationTransactionId');
@@ -88,7 +105,7 @@ abstract class AbstractPostRequest extends AbstractRequest
     }
 
     /**
-     * @return string
+     * @return string|null
      */
     public function getPresentationUsage()
     {
@@ -96,7 +113,7 @@ abstract class AbstractPostRequest extends AbstractRequest
     }
 
     /**
-     * @param string $value
+     * @param string|null $value
      * @return $this
      */
     public function setPresentationUsage($value)

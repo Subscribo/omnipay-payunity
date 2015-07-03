@@ -56,7 +56,7 @@ $response = $gateway->purchase([
     'brands' => 'VISA MASTER MAESTRO SOFORTUEBERWEISUNG',
     'returnUrl' => $urlBase.'/COPYandPAY/complete_purchase',
     'transactionId' => 'Optional identification of this transaction',
-    'presentationUsage' => 'Optional: Just for testing',
+    'description' => 'Just for testing',
     'paymentMemo' => 'Optional MEMO',
     'card' => $card, //Optional
 ])->send();

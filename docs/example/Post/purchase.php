@@ -27,6 +27,7 @@ try {
     $request->setCardReference($cardReference);
     $request->setAmount($amount);
     $request->setCurrency('EUR');
+    $request->setDescription('Test purchase');
 
     $response = $request->send();
     $transactionReference = $response->getTransactionReference();
