@@ -313,8 +313,10 @@ For example code see:
 * [COPYandPAY Purchase page](docs/example/COPYandPAY/purchase.php)
 * [COPYandPAY Complete purchase page](docs/example/COPYandPAY/complete_purchase.php)
 * [Post tokenized purchase page](docs/example/Post/purchase.php)
+* [Post tokenized authorize page](docs/example/Post/authorize.php)
+* [Post (partial) capture page](docs/example/Post/capture.php)
 * [Post void page](docs/example/Post/void.php)
-* [Post refund page](docs/example/Post/refund.php)
+* [Post (partial) refund page](docs/example/Post/refund.php)
 
 To run full workflow of example code you need to set up you routing mechanism to actually reach those examples,
 provide your valid API credentials as environment variables

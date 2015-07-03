@@ -1,17 +1,17 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Omnipay PayUnity driver POST recurring purchase example page</title>
+        <title>Omnipay PayUnity driver POST recurring authorize example page</title>
     </head>
     <body>
-        <h1>Omnipay PayUnity driver POST recurring purchase example page</h1>
+        <h1>Omnipay PayUnity driver POST recurring authorize example page</h1>
 <?php
 
 $urlBase = getenv('PAYUNITY_DRIVER_FOR_OMNIPAY_EXAMPLES_URL_BASE') ?: 'https://your.site.example/path/to/examples';
 
 try {
-    $amount = '1.05';
-    echo '<div>Purchase of amount: '.$amount.'</div>'."\n";
+    $amount = '2.15';
+    echo '<div>Authorization for amount: '.$amount.'</div>'."\n";
 
     $cardReference = isset($_POST['reference']) ? $_POST['reference'] : '';
 
@@ -24,11 +24,11 @@ try {
     $gateway->setUserPwd(getenv('PAYUNITY_USER_PWD') ?: 'demo');
 
 
-    $request = $gateway->purchase();
+    $request = $gateway->authorize();
     $request->setCardReference($cardReference);
     $request->setAmount($amount);
     $request->setCurrency('EUR');
-    $request->setDescription('Test purchase');
+    $request->setDescription('Test authorization');
 
     $response = $request->send();
     $transactionReference = $response->getTransactionReference();
@@ -54,21 +54,22 @@ try {
         <button type="submit">Make recurring authorization with amount 2.15 Euro</button>
     </form>
     <br>
+    <form action="<?php echo $urlBase; ?>/Post/capture" method="post" target="_blank">
+        <label for="reference">Card reference:</label>
+        <input type="text" name="reference" style="width:40em" value="<?php echo $cardReference ?>">
+        <label for="reference">Transaction reference:</label>
+        <input type="text" name="transaction" style="width:40em" value="<?php echo $transactionReference ?>">
+        <button type="submit">Partial capture 1.00 Euro</button>
+    </form>
+    <br>
     <form action="<?php echo $urlBase; ?>/Post/void" method="post" target="_blank">
         <label for="reference">Card reference:</label>
         <input type="text" name="reference" style="width:40em" value="<?php echo $cardReference ?>">
         <label for="reference">Transaction reference:</label>
         <input type="text" name="transaction" style="width:40em" value="<?php echo $transactionReference ?>">
-        <button type="submit">Void transaction</button>
+        <button type="submit">Void authorization</button>
     </form>
     <br>
-    <form action="<?php echo $urlBase; ?>/Post/refund" method="post" target="_blank">
-        <label for="reference">Card reference:</label>
-        <input type="text" name="reference" style="width:40em" value="<?php echo $cardReference ?>">
-        <label for="reference">Transaction reference:</label>
-        <input type="text" name="transaction" style="width:40em" value="<?php echo $transactionReference ?>">
-        <button type="submit">Partial refund 0.50 Euro</button>
-    </form>
 <?php
 
 } catch (Exception $e) {

@@ -16,6 +16,12 @@
             <button type="submit">Make recurring payment with amount 1.05 Euro</button>
         </form>
         <br>
+        <form action="<?php echo $urlBase; ?>/Post/authorize" method="post" target="_blank">
+            <label for="reference">Card reference:</label>
+            <input type="text" name="reference" style="width:40em" value="<?php echo $cardReference ?>">
+            <button type="submit">Make recurring authorization with amount 2.15 Euro</button>
+        </form>
+        <br>
         <form action="<?php echo $urlBase; ?>/Post/void" method="post" target="_blank">
             <label for="reference">Card reference:</label>
             <input type="text" name="reference" style="width:40em" value="<?php echo $cardReference ?>">
