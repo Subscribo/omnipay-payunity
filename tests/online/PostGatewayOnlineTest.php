@@ -472,7 +472,7 @@ class PostGatewayOnlineTest extends GatewayTestCase
     }
 
     /**
-     * @depends testAuthorizeSuccess
+     * @depends testCaptureSuccess
      * @param \Omnipay\PayUnity\Message\GenericPostResponse $response
      */
     public function testCaptureFailure($response)
