@@ -21,21 +21,10 @@ Omnipay PayUnity driver (beta version) is installed via [Composer](http://getcom
 To install, add it to your `composer.json` file
 (you might need to add also development version of egeloen/http-adapter):
 
-for beta version:
 ```json
 {
     "require": {
-        "subscribo/omnipay-payunity": "^0.3.0",
-        "egeloen/http-adapter": "^0.8@dev"
-    }
-}
-```
-
-for development (less stable) version:
-```json
-{
-    "require": {
-        "subscribo/omnipay-payunity": "0.4.*@dev",
+        "subscribo/omnipay-payunity": "^0.4.0",
         "egeloen/http-adapter": "^0.8@dev"
     }
 }
