@@ -312,7 +312,14 @@ abstract class AbstractPostRequest extends AbstractRequest
             $data['NAME.TITLE'] = $card->getTitle();
         }
         if ($card->getGender()) {
-            $data['NAME.SEX'] = $card->getGender();
+            $gender = $card->getGender();
+            if (CreditCard::GENDER_MALE === $gender) {
+                $data['NAME.SEX'] = 'M';
+            } elseif (CreditCard::GENDER_FEMALE === $gender) {
+                $data['NAME.SEX'] = 'F';
+            } else {
+                $data['NAME.SEX'] = strtoupper(substr($gender, 0, 1));
+            }
         }
         if ($card->getBirthday()) {
             $data['NAME.BIRTHDATE'] = $card->getBirthday();
