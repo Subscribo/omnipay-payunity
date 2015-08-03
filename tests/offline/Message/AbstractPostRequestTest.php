@@ -271,7 +271,6 @@ class AbstractPostRequestTest extends TestCase
             'CUSTOMER.SHIPPING.ADDRESS.ZIP' => 'XY1 23Z',
             'CUSTOMER.SHIPPING.ADDRESS.STATE' => 'DE1',
             'CUSTOMER.SHIPPING.ADDRESS.COUNTRY' => 'DE',
-            'CUSTOMER.SHIPPING.ADDRESS.STREET' => 'Main Square 2',
             'CUSTOMER.SHIPPING.CONTACT.PHONE' => '(+44) 01632 960 110',
             'CUSTOMER.SHIPPING.CONTACT.MOBILE' => '+44-7700-900-220',
         ];
