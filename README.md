@@ -18,14 +18,12 @@ Omnipay PayUnity driver version | PayUnity COPYandPAY version | Post Gateway
 ## Installation
 
 Omnipay PayUnity driver (beta version) is installed via [Composer](http://getcomposer.org/).
-To install, add it to your `composer.json` file
-(you might need to add also development version of egeloen/http-adapter):
+To install, add it to your `composer.json` file:
 
 ```json
 {
     "require": {
-        "subscribo/omnipay-payunity": "^0.4.0",
-        "egeloen/http-adapter": "^0.8@dev"
+        "subscribo/omnipay-payunity": "^0.4.1"
     }
 }
 ```
